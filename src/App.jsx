@@ -242,7 +242,7 @@ export default function App() {
 
   // ─── Telegram ────────────────────────────────────────────────────────────────
   const TG_TOKEN  = "8676807639:AAEKN94cSQT1sbXZfZhx0yUyYJe4Mn3pLRY";
-  const TG_CHAT   = "7762560415";
+  const TG_CHAT   = "-1003955567287";
 
   function sendTelegram(text) {
     fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {

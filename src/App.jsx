@@ -185,7 +185,7 @@ function deptColor(depts, name) {
 }
 
 const ALL_DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const DEFAULT_SHOW_DAYS = [4, 5, 6]; // Thu, Fri, Sat
+const DEFAULT_SHOW_DAYS = []; // No default — only marked show days are shown
 
 function getWeekDates(offset = 0) {
   const now = new Date();
@@ -276,13 +276,7 @@ export default function App() {
   const [shiftForm, setShiftForm]         = useState({ userId: "", date: "", start: "", end: "", role: "", note: "" });
   const [visibleDays, setVisibleDays]     = useState(DEFAULT_SHOW_DAYS);
   const [dayMeta, setDayMetaState]        = useState({});
-  const [showDays, setShowDaysState]      = useState(() => {
-    const dates = getWeekDates(0);
-    return new Set([4, 5, 6].map(i => {
-      const d = dates[i];
-      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    }));
-  });
+  const [showDays, setShowDaysState]      = useState(new Set());
   const [loading, setLoading]             = useState(true);
 
   // ─── Load all data from Supabase on mount ──────────────────────────────────
@@ -595,7 +589,7 @@ export default function App() {
 
       {/* Page */}
       <div style={{ padding: "22px 18px", maxWidth: 1100, margin: "0 auto" }} className="fade-in">
-        {view === "schedule"     && <ScheduleView     user={user} shifts={shifts} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} users={allUsers} giveupRequests={giveupRequests} onGiveup={s => setModal({ type: "giveup", shift: s })} dayMeta={dayMeta} depts={depts} />}
+        {view === "schedule"     && <ScheduleView     user={user} shifts={shifts} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} users={allUsers} giveupRequests={giveupRequests} onGiveup={s => setModal({ type: "giveup", shift: s })} dayMeta={dayMeta} depts={depts} showDays={showDays} />}
         {view === "availability" && <AvailabilityView user={user} availability={availability} onSubmit={() => setModal({ type: "availability" })} />}
         {view === "timeoff"      && <TimeOffView      user={user} requests={timeOffRequests} onRequest={() => setModal({ type: "timeoff" })} onAction={user.role === "owner" || user.role === "manager" ? handleTimeOffAction : null} onDelete={deleteTimeOff} users={allUsers} />}
         {view === "swaps"        && <SwapsView        user={user} shifts={shifts} giveupRequests={giveupRequests} users={allUsers} onGiveup={s => setModal({ type: "giveup", shift: s })} onClaim={claimShift} depts={depts} />}
@@ -715,7 +709,7 @@ function LoginScreen({ users, loginStep, setLoginStep, selectedUser, setSelected
 
 // ─── Schedule View ────────────────────────────────────────────────────────────
 
-function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visibleDays, toggleDay, users, giveupRequests, onGiveup, dayMeta }) {
+function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visibleDays, toggleDay, users, giveupRequests, onGiveup, dayMeta, showDays }) {
   const depts = useContext(DeptsContext);
   const DC = n => deptColor(depts, n);
   const lang = useContext(LangContext);
@@ -725,7 +719,12 @@ function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visi
   const showFull = isOwner || schedMode === "full";
 
   const myShifts = shifts.filter(s => s.userId === user.id);
-  const shownDates = weekDates.filter((_, i) => visibleDays.includes(i));
+
+  // Show only days marked as show days for this week — no fallback
+  const shownDates = weekDates.filter(d => {
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    return showDays && showDays.has(key);
+  });
 
   // Full grid shared between owner view and employee "full" view
   function FullGrid() {
@@ -879,7 +878,11 @@ function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visi
       </div>
 
       {shownDates.length === 0 ? (
-        <div className="card" style={{ padding: 32, textAlign: "center" }}><p style={{ color: "#444" }}>{lang === "es" ? "Ningún día seleccionado — toca un día arriba para mostrarlo" : "No days selected — tap a day above to show it"}</p></div>
+        <div className="card" style={{ padding: 40, textAlign: "center" }}>
+          <div style={{ fontSize: 34, marginBottom: 10 }}>📅</div>
+          <p style={{ color: "#555" }}>{lang === "es" ? "No hay días de show marcados esta semana" : "No show days marked for this week"}</p>
+          <p style={{ color: "#333", fontSize: 12, marginTop: 4 }}>{lang === "es" ? "Ve a Admin → Días de Show para marcar los días" : "Go to Admin → Show Days to mark your show nights"}</p>
+        </div>
       ) : showFull ? (
         <FullGrid />
       ) : (
@@ -1202,7 +1205,8 @@ function AdminView({ shifts, users, setUsers, onAddShift, onDeleteShift, weekDat
           weekOffset={weekOffset} setWeekOffset={setWeekOffset}
           onAddShift={onAddShift} onDeleteShift={onDeleteShift}
           availability={availability} timeOffRequests={timeOffRequests}
-          dayMeta={dayMeta} setDayMeta={setDayMeta} sendTelegram={sendTelegram}
+          dayMeta={dayMeta} setDayMeta={setDayMeta}
+          sendTelegram={sendTelegram} showDays={showDays}
         />
       )}
 
@@ -2189,12 +2193,17 @@ function calcHours(start, end) {
   return ((e - s) / 60).toFixed(2);
 }
 
-function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, onAddShift, onDeleteShift, availability, timeOffRequests, dayMeta, setDayMeta, sendTelegram }) {
+function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, onAddShift, onDeleteShift, availability, timeOffRequests, dayMeta, setDayMeta, sendTelegram, showDays }) {
   const depts = useContext(DeptsContext); const DC = n => deptColor(depts, n);
   const lang = useContext(LangContext);
   const t = T[lang];
   const DEPTS = depts.map(d => d.name);
-  const showDates = weekDates.filter((_, i) => [4, 5, 6].includes(i));
+
+  // Show only days marked as show days for this week — no fallback
+  const showDates = weekDates.filter(d => {
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    return showDays && showDays.has(key);
+  });
   const [published, setPublished] = useState(false);
 
   // Check if a user has approved time off covering a given date string (M/D)
@@ -2389,6 +2398,14 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
         </button>
       </div>
 
+      {showDates.length === 0 ? (
+        <div className="card" style={{ padding: 40, textAlign: "center", marginTop: 8 }}>
+          <div style={{ fontSize: 34, marginBottom: 10 }}>📅</div>
+          <p style={{ color: "#555", fontSize: 14 }}>No show days marked for this week</p>
+          <p style={{ color: "#333", fontSize: 12, marginTop: 4 }}>Go to <strong style={{ color: "#f97316" }}>Show Days</strong> tab and click the dates you want to schedule</p>
+        </div>
+      ) : (
+      <>
       <div style={{ overflowX: "auto", borderRadius: 12, border: "1px solid #1a1a26" }}>
         <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 600 }}>
           <thead>
@@ -2604,6 +2621,8 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
         <div style={{ flex: 1 }} />
         <span style={{ fontSize: 10, color: "#444" }}>Type start/end times (e.g. 8:00 PM, CLOSE) · OC = On Call</span>
       </div>
+      </>
+      )}
     </div>
   );
 }
@@ -2873,7 +2892,7 @@ function AvailDayCard({ date, avail, setField, setAllDay, removeDay, fmtKey, fmt
     : ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const dayName = DAY_NAMES[date.getDay()];
   const d = avail[key] || { available: true, allDay: false, start: "", end: "", note: "" };
-  const isPrimary = [4, 5, 6].includes(date.getDay());
+  const isPrimary = true; // all days in availability modal are show nights
 
   return (
     <div style={{ marginBottom: 8, background: "#0d0d18", borderRadius: 10, border: `1px solid ${isPrimary ? "#f9731628" : "#1a1a26"}` }}>

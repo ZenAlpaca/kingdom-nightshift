@@ -315,7 +315,7 @@ export default function App() {
           const deptsRow    = appStateData.find(r => r.key === "depts");
           if (showDaysRow) setShowDaysState(new Set(showDaysRow.value));
           if (dayMetaRow)  setDayMetaState(dayMetaRow.value);
-          if (deptsRow)    setDepts(deptsRow.value);
+          if (deptsRow)    setDepts_internal(deptsRow.value);
         }
       } catch(e) {
         console.error("Supabase load error:", e);
@@ -346,7 +346,7 @@ export default function App() {
   }
 
   // ─── Persist depts to Supabase ────────────────────────────────────────────
-  function setDepts(updater) {
+  function updateDepts(updater) {
     setDepts_internal(prev => {
       const next = typeof updater === "function" ? updater(prev) : updater;
       sb.upsert("app_state", { key: "depts", value: next });
@@ -593,7 +593,7 @@ export default function App() {
         {view === "availability" && <AvailabilityView user={user} availability={availability} onSubmit={() => setModal({ type: "availability" })} />}
         {view === "timeoff"      && <TimeOffView      user={user} requests={timeOffRequests} onRequest={() => setModal({ type: "timeoff" })} onAction={user.role === "owner" || user.role === "manager" ? handleTimeOffAction : null} onDelete={deleteTimeOff} users={allUsers} />}
         {view === "swaps"        && <SwapsView        user={user} shifts={shifts} giveupRequests={giveupRequests} users={allUsers} onGiveup={s => setModal({ type: "giveup", shift: s })} onClaim={claimShift} depts={depts} />}
-        {view === "admin" && (user.role === "owner" || user.role === "manager") && <AdminView shifts={shifts} users={allUsers} setUsers={updateUsers} onAddShift={saveShiftDirect} onDeleteShift={deleteShift} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} availability={availability} timeOffRequests={timeOffRequests} onTimeOffAction={handleTimeOffAction} onDeleteTimeOff={deleteTimeOff} showDays={showDays} setShowDays={setShowDays} currentUser={user} dayMeta={dayMeta} setDayMeta={setDayMeta} depts={depts} setDepts={setDepts} sendTelegram={sendTelegram} />}
+        {view === "admin" && (user.role === "owner" || user.role === "manager") && <AdminView shifts={shifts} users={allUsers} setUsers={updateUsers} onAddShift={saveShiftDirect} onDeleteShift={deleteShift} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} availability={availability} timeOffRequests={timeOffRequests} onTimeOffAction={handleTimeOffAction} onDeleteTimeOff={deleteTimeOff} showDays={showDays} setShowDays={setShowDays} currentUser={user} dayMeta={dayMeta} setDayMeta={setDayMeta} depts={depts} setDepts={updateDepts} sendTelegram={sendTelegram} />}
         {view === "notifs"       && <NotifsView       notifications={notifications.filter(n => n.userId === user.id)} />}
       </div>
 
@@ -1216,7 +1216,7 @@ function AdminView({ shifts, users, setUsers, onAddShift, onDeleteShift, weekDat
 
       {tab === "staff" && <StaffCSVManager users={users} setUsers={setUsers} />}
 
-      {tab === "setup" && <StaffSetup users={users} setUsers={setUsers} depts={depts} setDepts={setDepts} />}
+      {tab === "setup" && <StaffSetup users={users} setUsers={setUsers} depts={depts} setDepts={updateDepts} />}
 
       {tab === "availability" && (() => {
         // Only show actual employees (not owner/manager)
@@ -1574,7 +1574,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
       )}
 
       {/* ── Departments ── */}
-      <DeptManager depts={depts} setDepts={setDepts} users={users} />
+      <DeptManager depts={depts} setDepts={updateDepts} users={users} />
 
       {/* Manager access callout */}
       <div style={{ background: "#3b82f610", border: "1px solid #3b82f625", borderRadius: 10, padding: "10px 14px", marginBottom: 20, display: "flex", gap: 10, alignItems: "flex-start" }}>

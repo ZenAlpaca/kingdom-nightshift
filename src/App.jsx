@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 // ─── Language Context & Translations ─────────────────────────────────────────
 
@@ -205,52 +206,46 @@ function fmt(date) { return `${date.getMonth() + 1}/${date.getDate()}`; }
 const SB_URL = "https://xihxsenzdubgmopkrvsz.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpaHhzZW56ZHViZ21vcGtydnN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MDQ0NjQsImV4cCI6MjA5MjQ4MDQ2NH0.4Enzbj_KSekvh52Yq4Bo_E5yMkM0QHxwLkkMp-KcG_M";
 
-const SB_HEADERS = {
-  apikey: SB_KEY,
-  Authorization: `Bearer ${SB_KEY}`,
-  "Content-Type": "application/json",
-};
+const supabase = createClient(SB_URL, SB_KEY);
 
+// Convenience wrapper matching the old sb.get/post/patch/delete/upsert API
 const sb = {
   async get(table, params = "") {
-    const url = `${SB_URL}/rest/v1/${table}${params ? "?" + params : ""}`;
-    const r = await fetch(url, { headers: SB_HEADERS });
-    if (!r.ok) { console.error(`GET ${table} failed:`, r.status, await r.text()); return null; }
-    return r.json();
+    let q = supabase.from(table).select("*");
+    if (params.includes("order=")) {
+      const col = params.match(/order=(\w+)/)?.[1];
+      if (col) q = q.order(col);
+    }
+    if (params.includes("limit=")) {
+      const lim = parseInt(params.match(/limit=(\d+)/)?.[1]);
+      if (lim) q = q.limit(lim);
+    }
+    const { data, error } = await q;
+    if (error) { console.error(`GET ${table} failed:`, error.message); return null; }
+    return data;
   },
   async post(table, body) {
-    const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
-      method: "POST",
-      headers: { ...SB_HEADERS, Prefer: "return=representation" },
-      body: JSON.stringify(body)
-    });
-    if (!r.ok) console.error(`POST ${table} failed:`, r.status);
-    return r.ok ? r.json() : null;
+    const { data, error } = await supabase.from(table).insert(body).select();
+    if (error) console.error(`POST ${table} failed:`, error.message);
+    return data;
   },
   async patch(table, match, body) {
-    const r = await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
-      method: "PATCH",
-      headers: { ...SB_HEADERS, Prefer: "return=representation" },
-      body: JSON.stringify(body)
-    });
-    if (!r.ok) console.error(`PATCH ${table} failed:`, r.status);
-    return r.ok ? r.json() : null;
+    // match is like "id=eq.123"
+    const [col, val] = match.replace("=eq.", "=").split("=");
+    const { data, error } = await supabase.from(table).update(body).eq(col, val).select();
+    if (error) console.error(`PATCH ${table} failed:`, error.message);
+    return data;
   },
   async delete(table, match) {
-    const r = await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
-      method: "DELETE",
-      headers: SB_HEADERS
-    });
-    if (!r.ok) console.error(`DELETE ${table} failed:`, r.status);
+    const [col, val] = match.replace("=eq.", "=").split("=");
+    const { error } = await supabase.from(table).delete().eq(col, val);
+    if (error) console.error(`DELETE ${table} failed:`, error.message);
   },
   async upsert(table, body) {
-    const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
-      method: "POST",
-      headers: { ...SB_HEADERS, Prefer: "resolution=merge-duplicates,return=representation" },
-      body: JSON.stringify(body)
-    });
-    if (!r.ok) console.error(`UPSERT ${table} failed:`, r.status);
-    return r.ok ? r.json() : null;
+    const conflictCol = table === "app_state" ? "key" : table === "availability" ? "user_id" : "id";
+    const { data, error } = await supabase.from(table).upsert(body, { onConflict: conflictCol }).select();
+    if (error) console.error(`UPSERT ${table} failed:`, error.message);
+    return data;
   }
 };
 

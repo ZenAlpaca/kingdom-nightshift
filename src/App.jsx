@@ -205,42 +205,52 @@ function fmt(date) { return `${date.getMonth() + 1}/${date.getDate()}`; }
 const SB_URL = "https://xihxsenzdubgmopkrvsz.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpaHhzZW56ZHViZ21vcGtydnN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MDQ0NjQsImV4cCI6MjA5MjQ4MDQ2NH0.4Enzbj_KSekvh52Yq4Bo_E5yMkM0QHxwLkkMp-KcG_M";
 
+const SB_HEADERS = {
+  apikey: SB_KEY,
+  Authorization: `Bearer ${SB_KEY}`,
+  "Content-Type": "application/json",
+};
+
 const sb = {
   async get(table, params = "") {
-    const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
-      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json" }
-    });
+    const url = `${SB_URL}/rest/v1/${table}${params ? "?" + params : ""}`;
+    const r = await fetch(url, { headers: SB_HEADERS });
+    if (!r.ok) { console.error(`GET ${table} failed:`, r.status, await r.text()); return null; }
     return r.json();
   },
   async post(table, body) {
     const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
       method: "POST",
-      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "return=representation" },
+      headers: { ...SB_HEADERS, Prefer: "return=representation" },
       body: JSON.stringify(body)
     });
-    return r.json();
+    if (!r.ok) console.error(`POST ${table} failed:`, r.status);
+    return r.ok ? r.json() : null;
   },
   async patch(table, match, body) {
     const r = await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
       method: "PATCH",
-      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "return=representation" },
+      headers: { ...SB_HEADERS, Prefer: "return=representation" },
       body: JSON.stringify(body)
     });
-    return r.json();
+    if (!r.ok) console.error(`PATCH ${table} failed:`, r.status);
+    return r.ok ? r.json() : null;
   },
   async delete(table, match) {
-    await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
       method: "DELETE",
-      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+      headers: SB_HEADERS
     });
+    if (!r.ok) console.error(`DELETE ${table} failed:`, r.status);
   },
   async upsert(table, body) {
     const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
       method: "POST",
-      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=representation" },
+      headers: { ...SB_HEADERS, Prefer: "resolution=merge-duplicates,return=representation" },
       body: JSON.stringify(body)
     });
-    return r.json();
+    if (!r.ok) console.error(`UPSERT ${table} failed:`, r.status);
+    return r.ok ? r.json() : null;
   }
 };
 
@@ -289,7 +299,12 @@ export default function App() {
           sb.get("app_state", "")
         ]);
 
-        if (Array.isArray(users)) setAllUsers(users.map(u => ({ ...u, userId: u.id })));
+        if (Array.isArray(users) && users.length > 0) {
+          setAllUsers(users.map(u => ({ ...u, userId: u.id })));
+        } else {
+          // Fallback to hardcoded users if Supabase didn't return data
+          setAllUsers(USERS);
+        }
         if (Array.isArray(shiftsData)) setShifts(shiftsData.map(s => ({ id: s.id, userId: s.user_id, date: s.date, start: s.start_time, end: s.end_time, role: s.role, note: s.note || "" })));
         if (Array.isArray(availData)) {
           const av = {};
@@ -308,7 +323,10 @@ export default function App() {
           if (dayMetaRow)  setDayMetaState(dayMetaRow.value);
           if (deptsRow)    setDepts(deptsRow.value);
         }
-      } catch(e) { console.error("Supabase load error:", e); }
+      } catch(e) {
+        console.error("Supabase load error:", e);
+        setAllUsers(USERS); // always show staff even if DB fails
+      }
       setLoading(false);
     }
     loadAll();

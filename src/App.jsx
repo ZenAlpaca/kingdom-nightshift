@@ -12,7 +12,7 @@ const T = {
     enterPin: "Enter PIN",
     pinError: "Incorrect PIN — try again",
     back: "← Back",
-    owner: "Owner",
+    owner: "General Manager",
     // Nav
     schedule: "Schedule", availability: "Availability", timeOff: "Time Off",
     swaps: "Swaps", admin: "Admin",
@@ -80,7 +80,7 @@ const T = {
     enterPin: "Ingresa tu PIN",
     pinError: "PIN incorrecto — intenta de nuevo",
     back: "← Atrás",
-    owner: "Dueño",
+    owner: "Gerente General",
     // Nav
     schedule: "Horario", availability: "Disponibilidad", timeOff: "Tiempo Libre",
     swaps: "Cambios", admin: "Admin",
@@ -147,14 +147,28 @@ const T = {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const USERS = [
-  { id: 1, name: "Jordan Rivera", role: "owner", dept: null, pin: "0000", phone: "5551110000", avatar: "JR" },
-  { id: 2, name: "Marcus Bell",   role: "employee", dept: "Bartender",         pin: "1111", phone: "5551110001", avatar: "MB" },
-  { id: 3, name: "Sienna Walsh",  role: "employee", dept: "Bartender",         pin: "2222", phone: "5551110002", avatar: "SW" },
-  { id: 4, name: "Devon Park",    role: "employee", dept: "Security",          pin: "3333", phone: "5551110003", avatar: "DP" },
-  { id: 5, name: "Camille Tran",  role: "employee", dept: "Box Office",        pin: "4444", phone: "5551110004", avatar: "CT" },
-  { id: 6, name: "Remy Stone",    role: "employee", dept: "Barback",           pin: "5555", phone: "5551110005", avatar: "RS" },
-  { id: 7, name: "Nadia Cruz",    role: "employee", dept: "Lighting Director", pin: "6666", phone: "5551110006", avatar: "NC" },
-  { id: 8, name: "Theo James",    role: "employee", dept: "Security",          pin: "7777", phone: "5551110007", avatar: "TJ" },
+  { id:  1, name: "Ava Philmon",               role: "owner",    dept: null,               pin: "0312", phone: "123456789", avatar: "AP" },
+  { id:  2, name: "Cody Harmon",               role: "manager",  dept: "Bartender",        pin: "8080", phone: "123456789", avatar: "CH" },
+  { id:  3, name: "Alex Hayes",                role: "employee", dept: "Security",          pin: "8290", phone: "123456789", avatar: "AH" },
+  { id:  4, name: "Andrea Güereque Acevedo",   role: "employee", dept: "Box Office",        pin: "2502", phone: "123456789", avatar: "AG" },
+  { id:  5, name: "Bianka Baron",              role: "employee", dept: "Bartender",         pin: "6928", phone: "123456789", avatar: "BB" },
+  { id:  6, name: "Damian Medrano",            role: "employee", dept: "Bartender",         pin: "3441", phone: "123456789", avatar: "DM" },
+  { id:  7, name: "Eric Cooper",               role: "employee", dept: "Security",          pin: "5592", phone: "123456789", avatar: "EC" },
+  { id:  8, name: "Holland Corcoran",          role: "employee", dept: "Bartender",         pin: "2222", phone: "123456789", avatar: "HC" },
+  { id:  9, name: "Holly Baker",               role: "employee", dept: "Box Office",        pin: "1174", phone: "123456789", avatar: "HB" },
+  { id: 10, name: "Ishell Ochoa",              role: "employee", dept: "Box Office",        pin: "0826", phone: "123456789", avatar: "IO" },
+  { id: 11, name: "Jared Birdsong",            role: "employee", dept: "Security",          pin: "2473", phone: "123456789", avatar: "JB" },
+  { id: 12, name: "Jeremiah Becton",           role: "employee", dept: "Security",          pin: "1229", phone: "123456789", avatar: "JB" },
+  { id: 13, name: "Luke Hogenmiller",          role: "employee", dept: "Bartender",         pin: "0909", phone: "123456789", avatar: "LH" },
+  { id: 14, name: "Mark Salazar",              role: "employee", dept: "Barback",           pin: "4012", phone: "123456789", avatar: "MS" },
+  { id: 15, name: "Mia Baron",                 role: "employee", dept: "Bartender",         pin: "2104", phone: "123456789", avatar: "MB" },
+  { id: 16, name: "Nyres Colbert",             role: "employee", dept: "Security",          pin: "4987", phone: "123456789", avatar: "NC" },
+  { id: 17, name: "Omar Ramirez",              role: "employee", dept: "Bartender",         pin: "1988", phone: "123456789", avatar: "OR" },
+  { id: 18, name: "Raheem Johnson",            role: "employee", dept: "Security",          pin: "4117", phone: "123456789", avatar: "RJ" },
+  { id: 19, name: "Shakiro",                   role: "employee", dept: "Lighting Director", pin: "6133", phone: "123456789", avatar: "SH" },
+  { id: 20, name: "Trevon Allen Williams",     role: "employee", dept: "Security",          pin: "8098", phone: "123456789", avatar: "TW" },
+  { id: 21, name: "Weston Link",               role: "employee", dept: "Lighting Director", pin: "1917", phone: "123456789", avatar: "WL" },
+  { id: 22, name: "Zachary Peterson",          role: "employee", dept: "Lighting Director", pin: "6861", phone: "123456789", avatar: "ZP" },
 ];
 
 const INITIAL_DEPTS = [
@@ -186,25 +200,58 @@ function getWeekDates(offset = 0) {
 
 function fmt(date) { return `${date.getMonth() + 1}/${date.getDate()}`; }
 
-const initialShifts = [
-  { id: 1, userId: 2, date: fmt(getWeekDates()[4]), start: "8:00 PM", end: "2:00 AM", role: "Bartender", note: "Main Bar" },
-  { id: 2, userId: 3, date: fmt(getWeekDates()[4]), start: "8:00 PM", end: "2:00 AM", role: "Bartender", note: "VIP Bar" },
-  { id: 3, userId: 4, date: fmt(getWeekDates()[4]), start: "7:00 PM", end: "3:00 AM", role: "Security", note: "Front Door" },
-  { id: 4, userId: 8, date: fmt(getWeekDates()[5]), start: "7:00 PM", end: "3:00 AM", role: "Security", note: "Floor" },
-  { id: 5, userId: 5, date: fmt(getWeekDates()[5]), start: "6:00 PM", end: "11:00 PM", role: "Box Office", note: "" },
-  { id: 6, userId: 6, date: fmt(getWeekDates()[5]), start: "8:00 PM", end: "2:00 AM", role: "Barback", note: "Main Bar" },
-  { id: 7, userId: 7, date: fmt(getWeekDates()[6]), start: "5:00 PM", end: "3:00 AM", role: "Lighting Director", note: "Setup + Show" },
-  { id: 8, userId: 2, date: fmt(getWeekDates()[6]), start: "9:00 PM", end: "3:00 AM", role: "Bartender", note: "Main Bar" },
-];
+// ─── Supabase ─────────────────────────────────────────────────────────────────
+
+const SB_URL = "https://xihxsenzdubgmopkrvsz.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpaHhzZW56ZHViZ21vcGtydnN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MDQ0NjQsImV4cCI6MjA5MjQ4MDQ2NH0.4Enzbj_KSekvh52Yq4Bo_E5yMkM0QHxwLkkMp-KcG_M";
+
+const sb = {
+  async get(table, params = "") {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json" }
+    });
+    return r.json();
+  },
+  async post(table, body) {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+      method: "POST",
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "return=representation" },
+      body: JSON.stringify(body)
+    });
+    return r.json();
+  },
+  async patch(table, match, body) {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
+      method: "PATCH",
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "return=representation" },
+      body: JSON.stringify(body)
+    });
+    return r.json();
+  },
+  async delete(table, match) {
+    await fetch(`${SB_URL}/rest/v1/${table}?${match}`, {
+      method: "DELETE",
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    });
+  },
+  async upsert(table, body) {
+    const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+      method: "POST",
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=representation" },
+      body: JSON.stringify(body)
+    });
+    return r.json();
+  }
+};
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [user, setUser]                   = useState(null);
   const [lang, setLang]                   = useState("en");
-  const [depts, setDepts]                 = useState(INITIAL_DEPTS);
-  const [allUsers, setAllUsers]           = useState(USERS);
-  const [shifts, setShifts]               = useState(initialShifts);
+  const [depts, setDepts_internal]         = useState(INITIAL_DEPTS);
+  const [allUsers, setAllUsers]           = useState([]);
+  const [shifts, setShifts]               = useState([]);
   const [giveupRequests, setGiveupRequests] = useState([]);
   const [timeOffRequests, setTimeOffRequests] = useState([]);
   const [availability, setAvailability]   = useState({});
@@ -218,27 +265,85 @@ export default function App() {
   const [modal, setModal]                 = useState(null);
   const [shiftForm, setShiftForm]         = useState({ userId: "", date: "", start: "", end: "", role: "", note: "" });
   const [visibleDays, setVisibleDays]     = useState(DEFAULT_SHOW_DAYS);
-  // dayMeta: { "M/D": { doors, close } } — persists after publish so ScheduleView can show it
-  const [dayMeta, setDayMeta]             = useState({});
-  // showDays: Set of "YYYY-MM-DD" strings representing confirmed show nights
-  const [showDays, setShowDays]           = useState(() => {
-    // Pre-seed with this week's Thu/Fri/Sat as defaults
+  const [dayMeta, setDayMetaState]        = useState({});
+  const [showDays, setShowDaysState]      = useState(() => {
     const dates = getWeekDates(0);
     return new Set([4, 5, 6].map(i => {
       const d = dates[i];
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }));
   });
+  const [loading, setLoading]             = useState(true);
+
+  // ─── Load all data from Supabase on mount ──────────────────────────────────
+  useEffect(() => {
+    async function loadAll() {
+      try {
+        const [users, shiftsData, availData, timeOffData, giveupData, notifsData, appStateData] = await Promise.all([
+          sb.get("users", "order=name"),
+          sb.get("shifts", "order=date"),
+          sb.get("availability", ""),
+          sb.get("time_off_requests", "order=id"),
+          sb.get("giveup_requests", "order=id"),
+          sb.get("notifications", "order=id"),
+          sb.get("app_state", "")
+        ]);
+
+        if (Array.isArray(users)) setAllUsers(users.map(u => ({ ...u, userId: u.id })));
+        if (Array.isArray(shiftsData)) setShifts(shiftsData.map(s => ({ id: s.id, userId: s.user_id, date: s.date, start: s.start_time, end: s.end_time, role: s.role, note: s.note || "" })));
+        if (Array.isArray(availData)) {
+          const av = {};
+          availData.forEach(a => { av[a.user_id] = a.data; });
+          setAvailability(av);
+        }
+        if (Array.isArray(timeOffData)) setTimeOffRequests(timeOffData.map(r => ({ id: r.id, userId: r.user_id, dates: r.dates, reason: r.reason || "", status: r.status })));
+        if (Array.isArray(giveupData)) setGiveupRequests(giveupData.map(r => ({ id: r.id, shiftId: r.shift_id, fromUserId: r.from_user_id, status: r.status, takenBy: r.taken_by, note: r.note || "" })));
+        if (Array.isArray(notifsData)) setNotifications(notifsData.map(n => ({ id: n.id, userId: n.user_id, msg: n.msg, type: n.type || "info", read: n.read || false, time: n.time || "" })));
+
+        if (Array.isArray(appStateData)) {
+          const showDaysRow = appStateData.find(r => r.key === "show_days");
+          const dayMetaRow  = appStateData.find(r => r.key === "day_meta");
+          const deptsRow    = appStateData.find(r => r.key === "depts");
+          if (showDaysRow) setShowDaysState(new Set(showDaysRow.value));
+          if (dayMetaRow)  setDayMetaState(dayMetaRow.value);
+          if (deptsRow)    setDepts(deptsRow.value);
+        }
+      } catch(e) { console.error("Supabase load error:", e); }
+      setLoading(false);
+    }
+    loadAll();
+  }, []);
+
+  // ─── Persist showDays to Supabase ─────────────────────────────────────────
+  async function setShowDays(updater) {
+    setShowDaysState(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      const arr = [...next];
+      sb.upsert("app_state", { key: "show_days", value: arr });
+      return next;
+    });
+  }
+
+  // ─── Persist dayMeta to Supabase ──────────────────────────────────────────
+  async function setDayMeta(updater) {
+    setDayMetaState(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      sb.upsert("app_state", { key: "day_meta", value: next });
+      return next;
+    });
+  }
+
+  // ─── Persist depts to Supabase ────────────────────────────────────────────
+  function setDepts(updater) {
+    setDepts_internal(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      sb.upsert("app_state", { key: "depts", value: next });
+      return next;
+    });
+  }
 
   const weekDates = getWeekDates(weekOffset);
   const myNotifs  = notifications.filter(n => n.userId === user?.id && !n.read);
-
-  function addNotif(userId, msg, type = "info") {
-    setNotifications(prev => [...prev, {
-      id: Date.now() + Math.random(), userId, msg, type, read: false,
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    }]);
-  }
 
   // ─── Telegram ────────────────────────────────────────────────────────────────
   const TG_TOKEN  = "8676807639:AAEKN94cSQT1sbXZfZhx0yUyYJe4Mn3pLRY";
@@ -249,7 +354,13 @@ export default function App() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: "HTML" })
-    }).catch(() => {}); // silent fail — in-app notifications always work regardless
+    }).catch(() => {});
+  }
+
+  async function addNotif(userId, msg, type = "info") {
+    const n = { id: Date.now() + Math.random(), userId, msg, type, read: false, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
+    setNotifications(prev => [...prev, n]);
+    await sb.post("notifications", { id: Math.floor(n.id), user_id: userId, msg, type, read: false, time: n.time });
   }
 
   function handleLogin() {
@@ -260,10 +371,12 @@ export default function App() {
 
   function logout() { setUser(null); setView("schedule"); setWeekOffset(0); }
 
-  function postGiveup(shiftId, note = "") {
+  async function postGiveup(shiftId, note = "") {
     const shift = shifts.find(s => s.id === shiftId);
-    const req = { id: Date.now(), shiftId, fromUserId: user.id, status: "open", takenBy: null, note };
+    const id = Date.now();
+    const req = { id, shiftId, fromUserId: user.id, status: "open", takenBy: null, note };
     setGiveupRequests(prev => [...prev, req]);
+    await sb.post("giveup_requests", { id, shift_id: shiftId, from_user_id: user.id, status: "open", note });
     const notifMsg = note
       ? `🔄 ${user.name} is giving up their ${shift.role} shift on ${shift.date} (${shift.start}–${shift.end}). Note: "${note}" — Go to Swaps to claim it!`
       : `🔄 ${user.name} is giving up their ${shift.role} shift on ${shift.date} (${shift.start}–${shift.end}). Go to Swaps to claim it!`;
@@ -276,12 +389,14 @@ export default function App() {
     setModal(null);
   }
 
-  function claimShift(reqId) {
+  async function claimShift(reqId) {
     const req = giveupRequests.find(r => r.id === reqId);
     const shift = shifts.find(s => s.id === req.shiftId);
     const original = allUsers.find(u => u.id === req.fromUserId);
     setGiveupRequests(prev => prev.map(r => r.id === reqId ? { ...r, status: "taken", takenBy: user.id } : r));
     setShifts(prev => prev.map(s => s.id === shift.id ? { ...s, userId: user.id } : s));
+    await sb.patch("giveup_requests", `id=eq.${reqId}`, { status: "taken", taken_by: user.id });
+    await sb.patch("shifts", `id=eq.${shift.id}`, { user_id: user.id });
     addNotif(req.fromUserId, `✅ ${user.name} claimed your ${shift.role} shift on ${shift.date}. You're free!`, "swap");
     addNotif(user.id, `You claimed ${original.name}'s ${shift.role} shift on ${shift.date} (${shift.start}–${shift.end})`, "swap");
     allUsers.filter(u => u.role === "employee" && u.dept === shift.role && u.id !== user.id && u.id !== req.fromUserId)
@@ -289,55 +404,84 @@ export default function App() {
     sendTelegram(`✅ <b>Shift Claimed</b>\n\n<b>${user.name}</b> picked up <b>${original.name}</b>'s <b>${shift.role}</b> shift\n📅 ${shift.date} · ${shift.start}–${shift.end}`);
   }
 
-  function submitTimeOff(dates, reason) {
-    setTimeOffRequests(prev => [...prev, { id: Date.now(), userId: user.id, dates, reason, status: "pending" }]);
+  async function submitTimeOff(dates, reason) {
+    const id = Date.now();
+    setTimeOffRequests(prev => [...prev, { id, userId: user.id, dates, reason, status: "pending" }]);
+    await sb.post("time_off_requests", { id, user_id: user.id, dates, reason, status: "pending" });
     addNotif(1, `🏖 ${user.name} requested time off: ${dates}`);
     sendTelegram(`🏖 <b>Time Off Request</b>\n\n<b>${user.name}</b> has requested time off\n📅 ${dates}${reason ? `\n💬 ${reason}` : ""}\n\nApprove or deny in Kingdom NightShift → Admin → Time Off.`);
     setModal(null);
   }
 
-  function handleTimeOffAction(id, action) {
+  async function handleTimeOffAction(id, action) {
     const req = timeOffRequests.find(r => r.id === id);
     const emp = allUsers.find(u => u.id === req.userId);
     setTimeOffRequests(prev => prev.map(r => r.id === id ? { ...r, status: action } : r));
+    await sb.patch("time_off_requests", `id=eq.${id}`, { status: action });
     addNotif(req.userId, `Your time off request was ${action === "approved" ? "✅ approved" : "❌ denied"}.`);
     const emoji = action === "approved" ? "✅" : "❌";
     sendTelegram(`${emoji} <b>Time Off ${action === "approved" ? "Approved" : "Denied"}</b>\n\n<b>${emp?.name}</b>'s request for <b>${req.dates}</b> has been <b>${action}</b>.`);
   }
 
-  function deleteTimeOff(id) {
+  async function deleteTimeOff(id) {
     const req = timeOffRequests.find(r => r.id === id);
     setTimeOffRequests(prev => prev.filter(r => r.id !== id));
-    // notify owner if it was approved so they know plans changed
+    await sb.delete("time_off_requests", `id=eq.${id}`);
     if (req?.status === "approved") {
       addNotif(1, `⚠️ ${user.name} cancelled their approved time off: ${req.dates}`);
     }
   }
 
-  function saveShift() {
+  async function saveShift() {
     if (!shiftForm.userId || !shiftForm.date || !shiftForm.start || !shiftForm.end || !shiftForm.role) return;
-    const newShift = { ...shiftForm, id: Date.now(), userId: parseInt(shiftForm.userId) };
+    const id = Date.now();
+    const newShift = { ...shiftForm, id, userId: parseInt(shiftForm.userId) };
     setShifts(prev => [...prev, newShift]);
+    await sb.post("shifts", { id, user_id: parseInt(shiftForm.userId), date: shiftForm.date, start_time: shiftForm.start, end_time: shiftForm.end, role: shiftForm.role, note: shiftForm.note });
     addNotif(parseInt(shiftForm.userId), `📅 New shift: ${shiftForm.role} on ${shiftForm.date} (${shiftForm.start}–${shiftForm.end})`);
     setShiftForm({ userId: "", date: "", start: "", end: "", role: "", note: "" });
     setModal(null);
   }
 
-  function saveShiftDirect(shiftData) {
-    const newShift = { ...shiftData, id: Date.now() + Math.random() };
+  async function saveShiftDirect(shiftData) {
+    const id = Date.now() + Math.random();
+    const newShift = { ...shiftData, id };
     setShifts(prev => [...prev, newShift]);
+    await sb.post("shifts", { id: Math.floor(id), user_id: shiftData.userId, date: shiftData.date, start_time: shiftData.start, end_time: shiftData.end, role: shiftData.role, note: shiftData.note || "" });
     addNotif(shiftData.userId, `📅 You've been scheduled: ${shiftData.role} on ${shiftData.date} (${shiftData.start}${shiftData.end ? "–" + shiftData.end : ""})`);
   }
 
-  function saveAvailability(avail) {
+  async function deleteShift(id) {
+    setShifts(prev => prev.filter(s => s.id !== id));
+    await sb.delete("shifts", `id=eq.${id}`);
+  }
+
+  async function saveAvailability(avail) {
     setAvailability(prev => ({ ...prev, [user.id]: avail }));
+    await sb.upsert("availability", { user_id: user.id, data: avail });
     addNotif(1, `📋 ${user.name} submitted availability for next week.`);
     sendTelegram(`📋 <b>Availability Submitted</b>\n\n<b>${user.name}</b> has submitted their availability${avail.weekendLabel ? ` for <b>${avail.weekendLabel}</b>` : ""}.`);
     setModal(null);
   }
 
+  async function updateUsers(updater) {
+    const next = typeof updater === "function" ? updater(allUsers) : updater;
+    setAllUsers(next);
+    // Sync any changed/added users to Supabase
+    for (const u of next) {
+      await sb.upsert("users", { id: u.id, name: u.name, role: u.role, dept: u.dept, pin: u.pin, phone: u.phone || "", avatar: u.avatar });
+    }
+    // Delete removed users
+    const nextIds = new Set(next.map(u => u.id));
+    for (const u of allUsers) {
+      if (!nextIds.has(u.id)) await sb.delete("users", `id=eq.${u.id}`);
+    }
+  }
+
   function markNotifsRead() {
     setNotifications(prev => prev.map(n => n.userId === user?.id ? { ...n, read: true } : n));
+    notifications.filter(n => n.userId === user?.id && !n.read)
+      .forEach(n => sb.patch("notifications", `id=eq.${Math.floor(n.id)}`, { read: true }).catch(() => {}));
   }
 
   function toggleDay(idx) {
@@ -345,6 +489,15 @@ export default function App() {
       prev.includes(idx) ? prev.filter(d => d !== idx) : [...prev, idx].sort((a, b) => a - b)
     );
   }
+
+  // Loading screen
+  if (loading) return (
+    <div style={{ minHeight: "100vh", background: "#0a0a0f", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ width: 54, height: 54, background: "linear-gradient(135deg,#f97316,#ec4899)", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, marginBottom: 20 }}>🎵</div>
+      <div style={{ color: "#f97316", fontSize: 14, fontWeight: 600 }}>Loading Kingdom NightShift…</div>
+      <div style={{ color: "#444", fontSize: 12, marginTop: 6 }}>Connecting to database</div>
+    </div>
+  );
 
   if (!user) return (
     <LangContext.Provider value={lang}>
@@ -428,7 +581,7 @@ export default function App() {
         {view === "availability" && <AvailabilityView user={user} availability={availability} onSubmit={() => setModal({ type: "availability" })} />}
         {view === "timeoff"      && <TimeOffView      user={user} requests={timeOffRequests} onRequest={() => setModal({ type: "timeoff" })} onAction={user.role === "owner" || user.role === "manager" ? handleTimeOffAction : null} onDelete={deleteTimeOff} users={allUsers} />}
         {view === "swaps"        && <SwapsView        user={user} shifts={shifts} giveupRequests={giveupRequests} users={allUsers} onGiveup={s => setModal({ type: "giveup", shift: s })} onClaim={claimShift} depts={depts} />}
-        {view === "admin" && (user.role === "owner" || user.role === "manager") && <AdminView shifts={shifts} users={allUsers} setUsers={setAllUsers} onAddShift={saveShiftDirect} onDeleteShift={id => setShifts(prev => prev.filter(s => s.id !== id))} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} availability={availability} timeOffRequests={timeOffRequests} onTimeOffAction={handleTimeOffAction} onDeleteTimeOff={deleteTimeOff} showDays={showDays} setShowDays={setShowDays} currentUser={user} dayMeta={dayMeta} setDayMeta={setDayMeta} depts={depts} setDepts={setDepts} sendTelegram={sendTelegram} />}
+        {view === "admin" && (user.role === "owner" || user.role === "manager") && <AdminView shifts={shifts} users={allUsers} setUsers={updateUsers} onAddShift={saveShiftDirect} onDeleteShift={deleteShift} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} availability={availability} timeOffRequests={timeOffRequests} onTimeOffAction={handleTimeOffAction} onDeleteTimeOff={deleteTimeOff} showDays={showDays} setShowDays={setShowDays} currentUser={user} dayMeta={dayMeta} setDayMeta={setDayMeta} depts={depts} setDepts={setDepts} sendTelegram={sendTelegram} />}
         {view === "notifs"       && <NotifsView       notifications={notifications.filter(n => n.userId === user.id)} />}
       </div>
 

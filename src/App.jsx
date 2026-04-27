@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { createClient } from "@supabase/supabase-js";
 
 // ─── Language Context & Translations ─────────────────────────────────────────
 
@@ -201,51 +200,60 @@ function getWeekDates(offset = 0) {
 
 function fmt(date) { return `${date.getMonth() + 1}/${date.getDate()}`; }
 
-// ─── Supabase ─────────────────────────────────────────────────────────────────
+// ─── DB Proxy ─────────────────────────────────────────────────────────────────
+// All Supabase calls go through /api/db to avoid CORS/allowlist issues
 
-const SB_URL = "https://xihxsenzdubgmopkrvsz.supabase.co";
-const SB_KEY = "sb_publishable_A9A2MNTWRLbBYiWn1Cpc6w_DmR1KJkc";
-
-const supabase = createClient(SB_URL, SB_KEY);
-
-// Convenience wrapper matching the old sb.get/post/patch/delete/upsert API
 const sb = {
   async get(table, params = "") {
-    let q = supabase.from(table).select("*");
-    if (params.includes("order=")) {
-      const col = params.match(/order=(\w+)/)?.[1];
-      if (col) q = q.order(col);
-    }
-    if (params.includes("limit=")) {
-      const lim = parseInt(params.match(/limit=(\d+)/)?.[1]);
-      if (lim) q = q.limit(lim);
-    }
-    const { data, error } = await q;
-    if (error) { console.error(`GET ${table} failed:`, error.message); return null; }
-    return data;
+    try {
+      const url = `/api/db?table=${encodeURIComponent(table)}&params=${encodeURIComponent(params)}`;
+      const r = await fetch(url, { method: "GET" });
+      if (!r.ok) { console.error(`GET ${table} failed:`, r.status); return null; }
+      return r.json();
+    } catch(e) { console.error(`GET ${table} error:`, e); return null; }
   },
-  async post(table, body) {
-    const { data, error } = await supabase.from(table).insert(body).select();
-    if (error) console.error(`POST ${table} failed:`, error.message);
-    return data;
+  async post(table, data) {
+    try {
+      const r = await fetch("/api/db", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table, data }),
+      });
+      if (!r.ok) { console.error(`POST ${table} failed:`, r.status); return null; }
+      return r.json();
+    } catch(e) { console.error(`POST ${table} error:`, e); return null; }
   },
-  async patch(table, match, body) {
-    // match is like "id=eq.123"
-    const [col, val] = match.replace("=eq.", "=").split("=");
-    const { data, error } = await supabase.from(table).update(body).eq(col, val).select();
-    if (error) console.error(`PATCH ${table} failed:`, error.message);
-    return data;
+  async patch(table, match, data) {
+    try {
+      const r = await fetch("/api/db", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table, match, data }),
+      });
+      if (!r.ok) { console.error(`PATCH ${table} failed:`, r.status); return null; }
+      return r.json();
+    } catch(e) { console.error(`PATCH ${table} error:`, e); return null; }
   },
   async delete(table, match) {
-    const [col, val] = match.replace("=eq.", "=").split("=");
-    const { error } = await supabase.from(table).delete().eq(col, val);
-    if (error) console.error(`DELETE ${table} failed:`, error.message);
+    try {
+      const r = await fetch("/api/db", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table, match }),
+      });
+      if (!r.ok) console.error(`DELETE ${table} failed:`, r.status);
+    } catch(e) { console.error(`DELETE ${table} error:`, e); }
   },
-  async upsert(table, body) {
-    const conflictCol = table === "app_state" ? "key" : table === "availability" ? "user_id" : "id";
-    const { data, error } = await supabase.from(table).upsert(body, { onConflict: conflictCol }).select();
-    if (error) console.error(`UPSERT ${table} failed:`, error.message);
-    return data;
+  async upsert(table, data) {
+    try {
+      const r = await fetch("/api/db", {
+        method: "UPSERT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table, data }),
+      });
+      if (!r.ok) { console.error(`UPSERT ${table} failed:`, r.status); return null; }
+      return r.json();
+    } catch(e) { console.error(`UPSERT ${table} error:`, e); return null; }
   }
 };
 

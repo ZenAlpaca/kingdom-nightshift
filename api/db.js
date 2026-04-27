@@ -1,5 +1,5 @@
 const SB_URL = "https://xihxsenzdubgmopkrvsz.supabase.co";
-const SB_KEY = "sb_publishable_A9A2MNTWRLbBYiWn1Cpc6w_DmR1KJkc";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpaHhzZW56ZHViZ21vcGtydnN6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjkwNDQ2NCwiZXhwIjoyMDkyNDgwNDY0fQ.yNbTa5eTaMbGD7KiKOroTnm0FM0Q2pRqOKuueJWtFmM";
 
 const HEADERS = {
   apikey: SB_KEY,

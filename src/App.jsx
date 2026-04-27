@@ -204,7 +204,7 @@ function fmt(date) { return `${date.getMonth() + 1}/${date.getDate()}`; }
 // ─── Supabase ─────────────────────────────────────────────────────────────────
 
 const SB_URL = "https://xihxsenzdubgmopkrvsz.supabase.co";
-const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpaHhzZW56ZHViZ21vcGtydnN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MDQ0NjQsImV4cCI6MjA5MjQ4MDQ2NH0.4Enzbj_KSekvh52Yq4Bo_E5yMkM0QHxwLkkMp-KcG_M";
+const SB_KEY = "sb_publishable_A9A2MNTWRLbBYiWn1Cpc6w_DmR1KJkc";
 
 const supabase = createClient(SB_URL, SB_KEY);
 

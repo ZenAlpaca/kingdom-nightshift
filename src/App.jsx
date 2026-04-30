@@ -216,42 +216,42 @@ const sb = {
     try {
       const r = await fetch("/api/db", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-operation": "POST" },
         body: JSON.stringify({ table, data }),
       });
-      if (!r.ok) { console.error(`POST ${table} failed:`, r.status); return null; }
+      if (!r.ok) { console.error(`POST ${table} failed:`, r.status, await r.text()); return null; }
       return r.json();
     } catch(e) { console.error(`POST ${table} error:`, e); return null; }
   },
   async patch(table, match, data) {
     try {
       const r = await fetch("/api/db", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-operation": "PATCH" },
         body: JSON.stringify({ table, match, data }),
       });
-      if (!r.ok) { console.error(`PATCH ${table} failed:`, r.status); return null; }
+      if (!r.ok) { console.error(`PATCH ${table} failed:`, r.status, await r.text()); return null; }
       return r.json();
     } catch(e) { console.error(`PATCH ${table} error:`, e); return null; }
   },
   async delete(table, match) {
     try {
       const r = await fetch("/api/db", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-operation": "DELETE" },
         body: JSON.stringify({ table, match }),
       });
-      if (!r.ok) console.error(`DELETE ${table} failed:`, r.status);
+      if (!r.ok) console.error(`DELETE ${table} failed:`, r.status, await r.text());
     } catch(e) { console.error(`DELETE ${table} error:`, e); }
   },
   async upsert(table, data) {
     try {
       const r = await fetch("/api/db", {
-        method: "UPSERT",
-        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-operation": "UPSERT" },
         body: JSON.stringify({ table, data }),
       });
-      if (!r.ok) { console.error(`UPSERT ${table} failed:`, r.status); return null; }
+      if (!r.ok) { console.error(`UPSERT ${table} failed:`, r.status, await r.text()); return null; }
       return r.json();
     } catch(e) { console.error(`UPSERT ${table} error:`, e); return null; }
   }

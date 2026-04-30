@@ -434,8 +434,6 @@ export default function App() {
     setTimeOffRequests(prev => prev.map(r => r.id === id ? { ...r, status: action } : r));
     await sb.patch("time_off_requests", `id=eq.${id}`, { status: action });
     addNotif(req.userId, `Your time off request was ${action === "approved" ? "✅ approved" : "❌ denied"}.`);
-    const emoji = action === "approved" ? "✅" : "❌";
-    sendTelegram(`${emoji} <b>Time Off ${action === "approved" ? "Approved" : "Denied"}</b>\n\n<b>${emp?.name}</b>'s request for <b>${req.dates}</b> has been <b>${action}</b>.`);
   }
 
   async function deleteTimeOff(id) {
@@ -475,7 +473,6 @@ export default function App() {
     setAvailability(prev => ({ ...prev, [user.id]: avail }));
     await sb.upsert("availability", { user_id: user.id, data: avail });
     addNotif(1, `📋 ${user.name} submitted availability for next week.`);
-    sendTelegram(`📋 <b>Availability Submitted</b>\n\n<b>${user.name}</b> has submitted their availability${avail.weekendLabel ? ` for <b>${avail.weekendLabel}</b>` : ""}.`);
     setModal(null);
   }
 

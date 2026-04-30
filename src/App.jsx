@@ -2322,12 +2322,12 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
     });
   }
 
-  // Local editable grid: { [userId_date]: { start, end, oncall } }
+  // Local editable grid: { [userId_dept_date]: { start, end, oncall, role } }
   const [cells, setCells] = useState(() => {
     const init = {};
     shifts.forEach(s => {
-      const key = `${s.userId}_${s.date}`;
-      init[key] = { start: s.start, end: s.end, oncall: false, shiftId: s.id };
+      const key = `${s.userId}_${s.role}_${s.date}`;
+      init[key] = { start: s.start === "ON CALL" ? "" : s.start, end: s.end, oncall: s.start === "ON CALL", shiftId: s.id, role: s.role };
     });
     return init;
   });
@@ -2342,19 +2342,19 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
     setDayMeta(prev => ({ ...prev, [date]: { ...(prev?.[date] || {}), [field]: val } }));
   }
 
-  function getCell(userId, date) {
-    return cells[`${userId}_${date}`] || { start: "", end: "", oncall: false };
+  function getCell(userId, dept, date) {
+    return cells[`${userId}_${dept}_${date}`] || { start: "", end: "", oncall: false };
   }
 
-  function setCell(userId, date, field, val) {
-    const key = `${userId}_${date}`;
-    setCells(prev => ({ ...prev, [key]: { ...prev[key], [field]: val } }));
+  function setCell(userId, dept, date, field, val) {
+    const key = `${userId}_${dept}_${date}`;
+    setCells(prev => ({ ...prev, [key]: { ...prev[key], [field]: val, role: dept } }));
   }
 
-  function toggleOnCall(userId, date) {
-    const key = `${userId}_${date}`;
+  function toggleOnCall(userId, dept, date) {
+    const key = `${userId}_${dept}_${date}`;
     const cur = cells[key] || {};
-    setCells(prev => ({ ...prev, [key]: { ...cur, oncall: !cur.oncall } }));
+    setCells(prev => ({ ...prev, [key]: { ...cur, oncall: !cur.oncall, role: dept } }));
   }
 
   // Get availability info for a user on a given date
@@ -2370,31 +2370,42 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
   }
 
   // Publish all filled cells as shifts (notify employees)
-  function publishSchedule() {
-    // Remove all existing shifts for this week's show dates
+  async function publishSchedule() {
+    // First delete all existing shifts for this week's show dates
+    const deletePromises = [];
     showDates.forEach(d => {
       const dateStr = fmt(d);
-      shifts.filter(s => s.date === dateStr).forEach(s => onDeleteShift(s.id));
+      shifts.filter(s => s.date === dateStr).forEach(s => deletePromises.push(onDeleteShift(s.id)));
     });
-    // Add new shifts from cells
+    await Promise.all(deletePromises);
+
+    // Then add new shifts from cells
+    const addPromises = [];
     Object.entries(cells).forEach(([key, cell]) => {
       if (!cell.start && !cell.oncall) return;
-      const [userId, date] = key.split("_");
-      const u = users.find(u => u.id === parseInt(userId));
+      const parts = key.split("_");
+      const userId = parseInt(parts[0]);
+      const cellDept = parts[1];
+      const date = parts.slice(2).join("_");
+      const u = users.find(u => u.id === userId);
       if (!u || !showDates.some(d => fmt(d) === date)) return;
-      onAddShift && onAddShift({
+      // role comes from the cell's stored role, or fall back to first dept
+      addPromises.push(onAddShift && onAddShift({
         _direct: true,
-        userId: parseInt(userId),
+        userId,
         date,
         start: cell.oncall ? "ON CALL" : cell.start,
         end: cell.oncall ? "" : cell.end,
-        role: u.depts?.[0] || "",
+        role: cellDept || cell.role || u.depts?.[0] || "",
         note: ""
-      });
+      }));
     });
+    await Promise.all(addPromises);
+
     // Show success toast
     setPublished(true);
     setTimeout(() => setPublished(false), 3500);
+
     // Telegram notification
     const dateRange = `${showDates[0].toLocaleDateString("en-US",{month:"short",day:"numeric"})} – ${showDates[showDates.length-1].toLocaleDateString("en-US",{month:"short",day:"numeric"})}`;
     const scheduledNames = [...new Set(
@@ -2410,7 +2421,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
   function totalHours(userId) {
     let total = 0;
     showDates.forEach(d => {
-      const c = getCell(userId, fmt(d));
+      const c = getCell(userId, dept, fmt(d));
       const h = calcHours(c.start, c.end);
       if (h) total += parseFloat(h);
     });
@@ -2584,7 +2595,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
                     // Check if any scheduled day is outside their avail window
                     const hasAnyConflict = showDates.some(d => {
                       const dateStr = fmt(d);
-                      const cell = getCell(u.id, dateStr);
+                      const cell = getCell(u.id, dept, dateStr);
                       const info = getAvailInfo(u.id, dateStr);
                       return !cell.oncall && isOutsideAvail(cell.start, cell.end, info);
                     });
@@ -2601,7 +2612,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
                         {/* Day cells */}
                         {showDates.map(d => {
                           const dateStr = fmt(d);
-                          const cell = getCell(u.id, dateStr);
+                          const cell = getCell(u.id, dept, dateStr);
                           const availInfo = getAvailInfo(u.id, dateStr);
                           const isNA = availInfo?.available === false;
                           const isAvailAllDay = availInfo?.available && availInfo?.allDay;
@@ -2635,7 +2646,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
                                       </div>
                                     )}
                                     <input className="builder-input" style={{ ...inputStyle, color: conflict ? "#ef4444" : cell.oncall ? "#eab308" : "#e8e4dc" }} value={cell.start}
-                                      onChange={e => setCell(u.id, dateStr, "start", e.target.value)}
+                                      onChange={e => setCell(u.id, dept, dateStr, "start", e.target.value)}
                                       placeholder="–" />
                                     {cell.oncall && <div style={{ fontSize: 8, fontWeight: 700, color: "#eab308", textAlign: "center", marginTop: 2, letterSpacing: "0.06em" }}>ON CALL</div>}
                                     {conflict && <div style={{ fontSize: 8, color: "#ef4444", textAlign: "center", marginTop: 1 }}>⚠ early</div>}
@@ -2651,7 +2662,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
                                       <div style={{ fontSize: 8, color: conflict ? "#ef444470" : "#60a5fa", textAlign: "center", marginBottom: 1, fontWeight: 600 }}>{availEnd}</div>
                                     )}
                                     <input className="builder-input" style={{ ...inputStyle, color: conflict ? "#ef4444" : cell.oncall ? "#eab308" : "#e8e4dc" }} value={cell.end}
-                                      onChange={e => setCell(u.id, dateStr, "end", e.target.value)}
+                                      onChange={e => setCell(u.id, dept, dateStr, "end", e.target.value)}
                                       placeholder="–" />
                                     {cell.oncall && <div style={{ fontSize: 8, fontWeight: 700, color: "#eab30880", textAlign: "center", marginTop: 2, letterSpacing: "0.06em" }}>ON CALL</div>}
                                     {conflict && <div style={{ fontSize: 8, color: "#ef4444", textAlign: "center", marginTop: 1 }}>⚠ late</div>}
@@ -2669,7 +2680,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
                                     <div style={{ fontSize: 11, fontWeight: 600, color: conflict ? "#ef4444" : cell.oncall ? "#eab308" : hrs ? "#22c55e" : "#333" }}>
                                       {cell.oncall ? "OC" : hrs || "—"}
                                     </div>
-                                    <button onClick={() => toggleOnCall(u.id, dateStr)}
+                                    <button onClick={() => toggleOnCall(u.id, dept, dateStr)}
                                       style={{ fontSize: 8, background: cell.oncall ? "#eab30830" : "#1a1a28", color: cell.oncall ? "#eab308" : "#444", border: `1px solid ${cell.oncall ? "#eab30860" : "#222"}`, borderRadius: 3, padding: "1px 4px", cursor: "pointer", fontFamily: "'DM Sans',sans-serif", fontWeight: cell.oncall ? 700 : 400 }}>
                                       {cell.oncall ? "✓ OC" : "OC"}
                                     </button>

@@ -1528,7 +1528,7 @@ function DeptManager({ depts, setDepts, users }) {
 function StaffSetup({ users, setUsers, depts, setDepts }) {
   const DC = n => deptColor(depts, n);
   const [editingId, setEditingId]   = useState(null); // user id being edited
-  const [editForm, setEditForm]     = useState({});
+  const [editForm, setEditForm]     = useState({ firstName: "", lastName: "", pin: "", phone: "", isManager: false, depts: [] });
   const [addingDept, setAddingDept] = useState(null); // dept name where add row is open
   const [newForm, setNewForm]       = useState({ firstName: "", lastName: "", pin: "", phone: "", dept: "", isManager: false });
   const [saveMsg, setSaveMsg]       = useState("");
@@ -1563,12 +1563,15 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
   }
 
   function toggleEditDept(deptName) {
-    setEditForm(f => ({
-      ...f,
-      depts: f.depts.includes(deptName)
-        ? f.depts.filter(d => d !== deptName)
-        : [...f.depts, deptName]
-    }));
+    setEditForm(f => {
+      const current = f.depts || [];
+      return {
+        ...f,
+        depts: current.includes(deptName)
+          ? current.filter(d => d !== deptName)
+          : [...current, deptName]
+      };
+    });
   }
 
   function deleteUser(id) {
@@ -1697,7 +1700,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
                       <label style={{ fontSize: 9, color: "#555", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.04em" }}>Departments</label>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                         {depts.map(d => {
-                          const checked = editForm.depts?.includes(d.name);
+                          const checked = (editForm.depts || []).includes(d.name);
                           return (
                             <button key={d.name} className="btn" onClick={() => toggleEditDept(d.name)}
                               style={{ padding: "4px 10px", fontSize: 11, borderRadius: 20, background: checked ? `${d.color}20` : "#1a1a28", color: checked ? d.color : "#555", border: `1px solid ${checked ? d.color + "60" : "#2a2a3e"}`, fontWeight: checked ? 600 : 400 }}>

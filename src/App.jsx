@@ -147,28 +147,28 @@ const T = {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const USERS = [
-  { id:  1, name: "Ava Philmon",               role: "owner",    dept: null,               pin: "0312", phone: "123456789", avatar: "AP" },
-  { id:  2, name: "Cody Harmon",               role: "manager",  dept: "Bartender",        pin: "8080", phone: "123456789", avatar: "CH" },
-  { id:  3, name: "Alex Hayes",                role: "employee", dept: "Security",          pin: "8290", phone: "123456789", avatar: "AH" },
-  { id:  4, name: "Andrea Güereque Acevedo",   role: "employee", dept: "Box Office",        pin: "2502", phone: "123456789", avatar: "AG" },
-  { id:  5, name: "Bianka Baron",              role: "employee", dept: "Bartender",         pin: "6928", phone: "123456789", avatar: "BB" },
-  { id:  6, name: "Damian Medrano",            role: "employee", dept: "Bartender",         pin: "3441", phone: "123456789", avatar: "DM" },
-  { id:  7, name: "Eric Cooper",               role: "employee", dept: "Security",          pin: "5592", phone: "123456789", avatar: "EC" },
-  { id:  8, name: "Holland Corcoran",          role: "employee", dept: "Bartender",         pin: "2222", phone: "123456789", avatar: "HC" },
-  { id:  9, name: "Holly Baker",               role: "employee", dept: "Box Office",        pin: "1174", phone: "123456789", avatar: "HB" },
-  { id: 10, name: "Ishell Ochoa",              role: "employee", dept: "Box Office",        pin: "0826", phone: "123456789", avatar: "IO" },
-  { id: 11, name: "Jared Birdsong",            role: "employee", dept: "Security",          pin: "2473", phone: "123456789", avatar: "JB" },
-  { id: 12, name: "Jeremiah Becton",           role: "employee", dept: "Security",          pin: "1229", phone: "123456789", avatar: "JB" },
-  { id: 13, name: "Luke Hogenmiller",          role: "employee", dept: "Bartender",         pin: "0909", phone: "123456789", avatar: "LH" },
-  { id: 14, name: "Mark Salazar",              role: "employee", dept: "Barback",           pin: "4012", phone: "123456789", avatar: "MS" },
-  { id: 15, name: "Mia Baron",                 role: "employee", dept: "Bartender",         pin: "2104", phone: "123456789", avatar: "MB" },
-  { id: 16, name: "Nyres Colbert",             role: "employee", dept: "Security",          pin: "4987", phone: "123456789", avatar: "NC" },
-  { id: 17, name: "Omar Ramirez",              role: "employee", dept: "Bartender",         pin: "1988", phone: "123456789", avatar: "OR" },
-  { id: 18, name: "Raheem Johnson",            role: "employee", dept: "Security",          pin: "4117", phone: "123456789", avatar: "RJ" },
-  { id: 19, name: "Shakiro",                   role: "employee", dept: "Lighting Director", pin: "6133", phone: "123456789", avatar: "SH" },
-  { id: 20, name: "Trevon Allen Williams",     role: "employee", dept: "Security",          pin: "8098", phone: "123456789", avatar: "TW" },
-  { id: 21, name: "Weston Link",               role: "employee", dept: "Lighting Director", pin: "1917", phone: "123456789", avatar: "WL" },
-  { id: 22, name: "Zachary Peterson",          role: "employee", dept: "Lighting Director", pin: "6861", phone: "123456789", avatar: "ZP" },
+  { id:  1, name: "Ava Philmon",               role: "owner",    depts: [],               pin: "0312", phone: "123456789", avatar: "AP" },
+  { id:  2, name: "Cody Harmon",               role: "manager",  depts: ["Bartender"],        pin: "8080", phone: "123456789", avatar: "CH" },
+  { id:  3, name: "Alex Hayes",                role: "employee", depts: [""],          pin: "8290", phone: "123456789", avatar: "AH" },
+  { id:  4, name: "Andrea Güereque Acevedo",   role: "employee", depts: [""],        pin: "2502", phone: "123456789", avatar: "AG" },
+  { id:  5, name: "Bianka Baron",              role: "employee", depts: [""],         pin: "6928", phone: "123456789", avatar: "BB" },
+  { id:  6, name: "Damian Medrano",            role: "employee", depts: [""],         pin: "3441", phone: "123456789", avatar: "DM" },
+  { id:  7, name: "Eric Cooper",               role: "employee", depts: [""],          pin: "5592", phone: "123456789", avatar: "EC" },
+  { id:  8, name: "Holland Corcoran",          role: "employee", depts: [""],         pin: "2222", phone: "123456789", avatar: "HC" },
+  { id:  9, name: "Holly Baker",               role: "employee", depts: [""],        pin: "1174", phone: "123456789", avatar: "HB" },
+  { id: 10, name: "Ishell Ochoa",              role: "employee", depts: [""],        pin: "0826", phone: "123456789", avatar: "IO" },
+  { id: 11, name: "Jared Birdsong",            role: "employee", depts: [""],          pin: "2473", phone: "123456789", avatar: "JB" },
+  { id: 12, name: "Jeremiah Becton",           role: "employee", depts: [""],          pin: "1229", phone: "123456789", avatar: "JB" },
+  { id: 13, name: "Luke Hogenmiller",          role: "employee", depts: [""],         pin: "0909", phone: "123456789", avatar: "LH" },
+  { id: 14, name: "Mark Salazar",              role: "employee", depts: [""],           pin: "4012", phone: "123456789", avatar: "MS" },
+  { id: 15, name: "Mia Baron",                 role: "employee", depts: [""],         pin: "2104", phone: "123456789", avatar: "MB" },
+  { id: 16, name: "Nyres Colbert",             role: "employee", depts: [""],          pin: "4987", phone: "123456789", avatar: "NC" },
+  { id: 17, name: "Omar Ramirez",              role: "employee", depts: [""],         pin: "1988", phone: "123456789", avatar: "OR" },
+  { id: 18, name: "Raheem Johnson",            role: "employee", depts: [""],          pin: "4117", phone: "123456789", avatar: "RJ" },
+  { id: 19, name: "Shakiro",                   role: "employee", depts: [""], pin: "6133", phone: "123456789", avatar: "SH" },
+  { id: 20, name: "Trevon Allen Williams",     role: "employee", depts: [""],          pin: "8098", phone: "123456789", avatar: "TW" },
+  { id: 21, name: "Weston Link",               role: "employee", depts: [""], pin: "1917", phone: "123456789", avatar: "WL" },
+  { id: 22, name: "Zachary Peterson",          role: "employee", depts: [""], pin: "6861", phone: "123456789", avatar: "ZP" },
 ];
 
 const INITIAL_DEPTS = [
@@ -297,7 +297,7 @@ export default function App() {
         ]);
 
         if (Array.isArray(users) && users.length > 0) {
-          setAllUsers(users.map(u => ({ ...u, userId: u.id })));
+          setAllUsers(users.map(u => ({ ...u, userId: u.id, depts: Array.isArray(u.depts) ? u.depts : (u.dept ? [u.dept] : []) })));
         } else {
           // Fallback to hardcoded users if Supabase didn't return data
           setAllUsers(USERS);
@@ -395,7 +395,7 @@ export default function App() {
     const notifMsg = note
       ? `🔄 ${user.name} is giving up their ${shift.role} shift on ${shift.date} (${shift.start}–${shift.end}). Note: "${note}" — Go to Swaps to claim it!`
       : `🔄 ${user.name} is giving up their ${shift.role} shift on ${shift.date} (${shift.start}–${shift.end}). Go to Swaps to claim it!`;
-    allUsers.filter(u => u.role === "employee" && u.dept === shift.role && u.id !== user.id)
+    allUsers.filter(u => u.role === "employee" && u.depts?.includes(shift.role) && u.id !== user.id)
       .forEach(u => addNotif(u.id, notifMsg, "swap"));
     const tgMsg = note
       ? `🔄 <b>Shift Available for Pickup</b>\n\n<b>${user.name}</b> is giving up their <b>${shift.role}</b> shift\n📅 ${shift.date} · ${shift.start}–${shift.end}\n💬 "${note}"\n\nOpen Kingdom NightShift to claim it.`
@@ -414,7 +414,7 @@ export default function App() {
     await sb.patch("shifts", `id=eq.${shift.id}`, { user_id: user.id });
     addNotif(req.fromUserId, `✅ ${user.name} claimed your ${shift.role} shift on ${shift.date}. You're free!`, "swap");
     addNotif(user.id, `You claimed ${original.name}'s ${shift.role} shift on ${shift.date} (${shift.start}–${shift.end})`, "swap");
-    allUsers.filter(u => u.role === "employee" && u.dept === shift.role && u.id !== user.id && u.id !== req.fromUserId)
+    allUsers.filter(u => u.role === "employee" && u.depts?.includes(shift.role) && u.id !== user.id && u.id !== req.fromUserId)
       .forEach(u => addNotif(u.id, `The ${shift.role} shift on ${shift.date} was claimed — no longer available.`, "info"));
     sendTelegram(`✅ <b>Shift Claimed</b>\n\n<b>${user.name}</b> picked up <b>${original.name}</b>'s <b>${shift.role}</b> shift\n📅 ${shift.date} · ${shift.start}–${shift.end}`);
   }
@@ -484,7 +484,7 @@ export default function App() {
     setAllUsers(next);
     // Sync any changed/added users to Supabase
     for (const u of next) {
-      await sb.upsert("users", { id: u.id, name: u.name, role: u.role, dept: u.dept, pin: u.pin, phone: u.phone || "", avatar: u.avatar });
+      await sb.upsert("users", { id: u.id, name: u.name, role: u.role, dept: u.depts?.[0] || null, depts: u.depts || [], pin: u.pin, phone: u.phone || "", avatar: u.avatar });
     }
     // Delete removed users
     const nextIds = new Set(next.map(u => u.id));
@@ -688,7 +688,7 @@ function LoginScreen({ users, loginStep, setLoginStep, selectedUser, setSelected
                 <div style={{ width: 34, height: 34, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#f97316", flexShrink: 0 }}>{u.avatar}</div>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600 }}>{u.name.split(" ")[0]}</div>
-                  <div style={{ fontSize: 10, color: "#444" }}>{u.role === "owner" || u.role === "manager" ? t.owner : u.dept}</div>
+                  <div style={{ fontSize: 10, color: "#444" }}>{u.role === "owner" || u.role === "manager" ? t.owner : (u.depts?.[0] || "")}</div>
                 </div>
               </button>
             ))}
@@ -700,7 +700,7 @@ function LoginScreen({ users, loginStep, setLoginStep, selectedUser, setSelected
         <div className="fade-in" style={{ width: "100%", maxWidth: 300, textAlign: "center" }}>
           <div style={{ width: 50, height: 50, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#f97316", margin: "0 auto 10px" }}>{selectedUser.avatar}</div>
           <p style={{ color: "#e8e4dc", fontWeight: 600, marginBottom: 3 }}>{selectedUser.name}</p>
-          <p style={{ color: "#444", fontSize: 12, marginBottom: 22 }}>{selectedUser.role === "owner" || selectedUser.role === "manager" ? t.owner : selectedUser.dept}</p>
+          <p style={{ color: "#444", fontSize: 12, marginBottom: 22 }}>{selectedUser.role === "owner" || selectedUser.role === "manager" ? t.owner : (selectedUser.depts?.[0] || "")}</p>
           <p style={{ color: "#555", fontSize: 11, marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.07em" }}>{t.enterPin}</p>
 
           <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 18 }}>
@@ -802,7 +802,7 @@ function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visi
           </thead>
           <tbody>
             {depts.map(({ name: dept, color }) => {
-              const deptUsers = users.filter(u => u.role === "employee" && u.dept === dept);
+              const deptUsers = users.filter(u => u.role === "employee" && u.depts?.includes(dept));
               if (deptUsers.length === 0) return null;
               const colCount = shownDates.length + 1;
 
@@ -1079,7 +1079,7 @@ function TimeOffView({ user, requests, onRequest, onAction, onDelete, users }) {
           <div key={r.id} className="card" style={{ padding: 16, marginBottom: 8, borderColor: isConfirming ? "#ef444430" : "#1e1e2e" }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
               <div style={{ flex: 1 }}>
-                {isOwner && <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 3 }}>{u?.name} <span style={{ color: "#444", fontWeight: 400 }}>{u?.dept}</span></div>}
+                {isOwner && <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 3 }}>{u?.name} <span style={{ color: "#444", fontWeight: 400 }}>{(u?.depts||[]).join(", ")}</span></div>}
                 <div style={{ fontSize: 14, color: "#e8e4dc" }}>{r.dates}</div>
                 {r.reason && <div style={{ fontSize: 12, color: "#555", marginTop: 3 }}>{r.reason}</div>}
               </div>
@@ -1126,7 +1126,7 @@ function SwapsView({ user, shifts, giveupRequests, users, onGiveup, onClaim, dep
   const claimable = giveupRequests.filter(r => {
     if (r.status !== "open" || r.fromUserId === user.id) return false;
     const shift = shifts.find(s => s.id === r.shiftId);
-    return shift && shift.role === user.dept;
+    return shift && user.depts?.includes(shift.role);
   });
   const myPending = giveupRequests.filter(r => r.fromUserId === user.id && r.status === "open");
 
@@ -1272,7 +1272,7 @@ function AdminView({ shifts, users, setUsers, onAddShift, onDeleteShift, weekDat
                   return (
                     <div key={u.id} className="card" style={{ padding: 14, marginBottom: 8 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
-                        <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 700, color: DC(u.dept) }}>{u.avatar}</div>
+                        <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 700, color: DC(u.depts?.[0] || "") }}>{u.avatar}</div>
                         <span style={{ fontWeight: 600, fontSize: 13, flex: 1 }}>{u.name}</span>
                         <span style={{ fontSize: 11, color: "#f97316" }}>{avail?.weekendLabel}</span>
                       </div>
@@ -1303,10 +1303,10 @@ function AdminView({ shifts, users, setUsers, onAddShift, onDeleteShift, weekDat
                 </div>
                 {notSubmitted.map(u => (
                   <div key={u.id} className="card" style={{ padding: 12, marginBottom: 8, display: "flex", alignItems: "center", gap: 10, opacity: 0.7 }}>
-                    <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 700, color: DC(u.dept) }}>{u.avatar}</div>
+                    <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 700, color: DC(u.depts?.[0] || "") }}>{u.avatar}</div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: "#888" }}>{u.name}</div>
-                      <div style={{ fontSize: 10, color: "#444" }}>{u.dept}</div>
+                      <div style={{ fontSize: 10, color: "#444" }}>{(u.depts||[]).join(", ")}</div>
                     </div>
                     <span style={{ fontSize: 11, color: "#333" }}>No submission</span>
                   </div>
@@ -1350,7 +1350,7 @@ function AdminTimeOffTab({ timeOffRequests, users, onTimeOffAction, onDeleteTime
           <div key={r.id} className="card" style={{ padding: 14, marginBottom: 8, borderColor: isConfirming ? "#ef444430" : "#1e1e2e" }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
               <div>
-                <div style={{ fontSize: 12, fontWeight: 600 }}>{u?.name} <span style={{ color: "#444", fontWeight: 400, fontSize: 11 }}>{u?.dept}</span></div>
+                <div style={{ fontSize: 12, fontWeight: 600 }}>{u?.name} <span style={{ color: "#444", fontWeight: 400, fontSize: 11 }}>{(u?.depts||[]).join(", ")}</span></div>
                 <div style={{ fontSize: 13, marginTop: 3 }}>{r.dates}</div>
                 {r.reason && <div style={{ fontSize: 12, color: "#555", marginTop: 2 }}>{r.reason}</div>}
               </div>
@@ -1436,7 +1436,7 @@ function DeptManager({ depts, setDepts, users }) {
 
       {/* Existing depts */}
       {depts.map(({ name, color }) => {
-        const staffCount = users.filter(u => u.dept === name).length;
+        const staffCount = users.filter(u => u.depts?.includes(name)).length;
         const isEditing = editingDept === name;
         const isConfirming = confirmDel === name;
 
@@ -1543,7 +1543,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
   function startEdit(u) {
     const [first, ...rest] = u.name.split(" ");
     setEditingId(u.id);
-    setEditForm({ firstName: first, lastName: rest.join(" "), pin: u.pin, phone: u.phone, isManager: u.role === "manager" });
+    setEditForm({ firstName: first, lastName: rest.join(" "), pin: u.pin, phone: u.phone, isManager: u.role === "manager", depts: u.depts || [] });
   }
 
   function saveEdit(u) {
@@ -1556,9 +1556,19 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
       phone: editForm.phone,
       avatar: makeAvatar(name),
       role: editForm.isManager ? "manager" : "employee",
+      depts: editForm.depts || [],
     } : p));
     setEditingId(null);
     showSave("✅ Changes saved");
+  }
+
+  function toggleEditDept(deptName) {
+    setEditForm(f => ({
+      ...f,
+      depts: f.depts.includes(deptName)
+        ? f.depts.filter(d => d !== deptName)
+        : [...f.depts, deptName]
+    }));
   }
 
   function deleteUser(id) {
@@ -1574,11 +1584,12 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
   function saveNew() {
     const name = `${newForm.firstName.trim()} ${newForm.lastName.trim()}`.trim();
     if (!name || !/^\d{4}$/.test(newForm.pin)) return;
+    const allDepts = newForm.dept ? [newForm.dept, ...(newForm.extraDepts || []).filter(d => d !== newForm.dept)] : (newForm.extraDepts || []);
     const newUser = {
       id: Date.now(),
       name,
       role: newForm.isManager ? "manager" : "employee",
-      dept: newForm.dept,
+      depts: allDepts,
       pin: newForm.pin,
       phone: newForm.phone || "",
       avatar: makeAvatar(name),
@@ -1624,7 +1635,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
       </div>
 
       {depts.map(({ name: dept, color }) => {
-        const deptEmployees = employees.filter(u => u.dept === dept);
+        const deptEmployees = employees.filter(u => u.depts?.includes(dept));
 
         return (
           <div key={dept} className="card" style={{ marginBottom: 14, overflow: "hidden" }}>
@@ -1671,7 +1682,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
                     </div>
 
                     {/* Manager toggle */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                       <button onClick={() => setEditForm(f => ({ ...f, isManager: !f.isManager }))}
                         style={{ width: 36, height: 20, borderRadius: 10, background: editForm.isManager ? "#3b82f6" : "#1a1a28", border: `1px solid ${editForm.isManager ? "#3b82f6" : "#2a2a3e"}`, cursor: "pointer", position: "relative", transition: "all 0.2s", flexShrink: 0 }}>
                         <div style={{ width: 14, height: 14, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: editForm.isManager ? 18 : 2, transition: "left 0.2s" }} />
@@ -1679,6 +1690,22 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
                       <span style={{ fontSize: 12, color: editForm.isManager ? "#3b82f6" : "#666", fontWeight: editForm.isManager ? 600 : 400 }}>
                         {editForm.isManager ? "🔑 Manager Access" : "Standard Employee"}
                       </span>
+                    </div>
+
+                    {/* Dept checkboxes */}
+                    <div style={{ marginBottom: 12 }}>
+                      <label style={{ fontSize: 9, color: "#555", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.04em" }}>Departments</label>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                        {depts.map(d => {
+                          const checked = editForm.depts?.includes(d.name);
+                          return (
+                            <button key={d.name} className="btn" onClick={() => toggleEditDept(d.name)}
+                              style={{ padding: "4px 10px", fontSize: 11, borderRadius: 20, background: checked ? `${d.color}20` : "#1a1a28", color: checked ? d.color : "#555", border: `1px solid ${checked ? d.color + "60" : "#2a2a3e"}`, fontWeight: checked ? 600 : 400 }}>
+                              {checked ? "✓ " : ""}{d.name}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div style={{ display: "flex", gap: 8 }}>
@@ -1694,13 +1721,19 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
                 ) : (
                   /* ── Display row ── */
                   <div style={{ padding: "10px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#1a1a28", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color, flexShrink: 0 }}>{u.avatar}</div>
+                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#1a1a28", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: DC(u.depts?.[0] || ""), flexShrink: 0 }}>{u.avatar}</div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
                         <span style={{ fontSize: 13, fontWeight: 600, color: "#ddd" }}>{u.name}</span>
                         {u.role === "manager" && (
                           <span style={{ fontSize: 9, background: "#3b82f620", color: "#3b82f6", borderRadius: 4, padding: "1px 6px", fontWeight: 700, letterSpacing: "0.04em" }}>MANAGER</span>
                         )}
+                      </div>
+                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 3 }}>
+                        {(u.depts || []).map(d => (
+                          <span key={d} style={{ fontSize: 9, background: `${DC(d)}18`, color: DC(d), borderRadius: 4, padding: "1px 6px", fontWeight: 600 }}>{d}</span>
+                        ))}
+                        {(!u.depts || u.depts.length === 0) && <span style={{ fontSize: 10, color: "#444" }}>No department</span>}
                       </div>
                       <div style={{ fontSize: 10, color: "#444", marginTop: 1 }}>{u.phone || "No phone on file"}</div>
                     </div>
@@ -1735,7 +1768,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
                 </div>
 
                 {/* Manager toggle */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                   <button onClick={() => setNewForm(f => ({ ...f, isManager: !f.isManager }))}
                     style={{ width: 36, height: 20, borderRadius: 10, background: newForm.isManager ? "#3b82f6" : "#1a1a28", border: `1px solid ${newForm.isManager ? "#3b82f6" : "#2a2a3e"}`, cursor: "pointer", position: "relative", transition: "all 0.2s", flexShrink: 0 }}>
                     <div style={{ width: 14, height: 14, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: newForm.isManager ? 18 : 2, transition: "left 0.2s" }} />
@@ -1743,6 +1776,25 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
                   <span style={{ fontSize: 12, color: newForm.isManager ? "#3b82f6" : "#666", fontWeight: newForm.isManager ? 600 : 400 }}>
                     {newForm.isManager ? "🔑 Grant Manager Access" : "Standard Employee"}
                   </span>
+                </div>
+
+                {/* Additional depts */}
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ fontSize: 9, color: "#555", display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.04em" }}>Also works in (optional)</label>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                    {depts.filter(d => d.name !== dept).map(d => {
+                      const checked = (newForm.extraDepts || []).includes(d.name);
+                      return (
+                        <button key={d.name} className="btn" onClick={() => setNewForm(f => ({
+                          ...f,
+                          extraDepts: checked ? (f.extraDepts||[]).filter(x => x !== d.name) : [...(f.extraDepts||[]), d.name]
+                        }))}
+                          style={{ padding: "4px 10px", fontSize: 11, borderRadius: 20, background: checked ? `${d.color}20` : "#1a1a28", color: checked ? d.color : "#555", border: `1px solid ${checked ? d.color + "60" : "#2a2a3e"}`, fontWeight: checked ? 600 : 400 }}>
+                          {checked ? "✓ " : ""}{d.name}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div style={{ display: "flex", gap: 8 }}>
@@ -1967,7 +2019,7 @@ function StaffCSVManager({ users, setUsers }) {
   function downloadCurrent() {
     const rows = [CSV_HEADERS.join(",")];
     users.filter(u => u.role === "employee").forEach(u => {
-      rows.push([u.name, u.dept, u.pin, u.phone].join(","));
+      rows.push([u.name, (u.depts||[]).join("|"), u.pin, u.phone].join(","));
     });
     const blob = new Blob([rows.join("\n")], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -2033,7 +2085,7 @@ function StaffCSVManager({ users, setUsers }) {
       id: Date.now() + i,
       name: row.name,
       role: "employee",
-      dept: row.dept,
+      depts: row.dept ? row.dept.split("|") : [],
       pin: row.pin,
       phone: row.phone,
       avatar: makeAvatar(row.name),
@@ -2147,12 +2199,12 @@ function StaffCSVManager({ users, setUsers }) {
                   <tr key={i} style={{ borderBottom: "1px solid #0d0d14", background: i % 2 === 0 ? "#0c0c14" : "#0a0a10" }}>
                     <td style={{ padding: "8px 12px", fontSize: 13 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div style={{ width: 26, height: 26, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: DC(row.dept), flexShrink: 0 }}>{makeAvatar(row.name)}</div>
+                        <div style={{ width: 26, height: 26, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: DC((row.depts||[])[0] || row.dept || ""), flexShrink: 0 }}>{makeAvatar(row.name)}</div>
                         {row.name}
                       </div>
                     </td>
                     <td style={{ padding: "8px 12px" }}>
-                      <span className="pill" style={{ background: `${DC(row.dept)}18`, color: DC(row.dept), fontSize: 11 }}>{row.dept}</span>
+                      <span className="pill" style={{ background: `${DC((row.depts||[])[0] || row.dept || "")}18`, color: DC((row.depts||[])[0] || row.dept || ""), fontSize: 11 }}>{(row.depts||[row.dept]).join(", ")}</span>
                     </td>
                     <td style={{ padding: "8px 12px", fontFamily: "monospace", fontSize: 13, color: "#666" }}>{"•".repeat(row.pin.length)}</td>
                     <td style={{ padding: "8px 12px", fontSize: 12, color: "#555" }}>{row.phone}</td>
@@ -2185,12 +2237,12 @@ function StaffCSVManager({ users, setUsers }) {
                     <tr key={u.id} style={{ borderBottom: "1px solid #0d0d14", background: i % 2 === 0 ? "#0c0c14" : "#0a0a10" }}>
                       <td style={{ padding: "9px 12px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                          <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: DC(u.dept), flexShrink: 0 }}>{u.avatar}</div>
+                          <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: DC(u.depts?.[0] || ""), flexShrink: 0 }}>{u.avatar}</div>
                           <span style={{ fontSize: 13, fontWeight: 600 }}>{u.name}</span>
                         </div>
                       </td>
                       <td style={{ padding: "9px 12px" }}>
-                        <span className="pill" style={{ background: `${DC(u.dept)}18`, color: DC(u.dept) }}>{u.dept}</span>
+                        <span className="pill" style={{ background: `${DC(u.depts?.[0] || "")}18`, color: DC(u.depts?.[0] || "") }}>{u.dept}</span>
                       </td>
                       <td style={{ padding: "9px 12px", fontSize: 12, color: "#555" }}>{u.phone}</td>
                       <td style={{ padding: "9px 12px", fontFamily: "monospace", fontSize: 12, color: "#333" }}>{"•".repeat(4)}</td>
@@ -2336,7 +2388,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
         date,
         start: cell.oncall ? "ON CALL" : cell.start,
         end: cell.oncall ? "" : cell.end,
-        role: u.dept,
+        role: u.depts?.[0] || "",
         note: ""
       });
     });
@@ -2515,7 +2567,7 @@ function ScheduleBuilder({ shifts, users, weekDates, weekOffset, setWeekOffset, 
           </thead>
           <tbody>
             {DEPTS.map(dept => {
-              const deptUsers = users.filter(u => u.dept === dept);
+              const deptUsers = users.filter(u => u.depts?.includes(dept));
               const color = DC(dept) || "#888";
               return (
                 <React.Fragment key={dept}>

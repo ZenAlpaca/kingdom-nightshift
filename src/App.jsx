@@ -1252,7 +1252,7 @@ function AdminView({ shifts, users, setUsers, onAddShift, onDeleteShift, weekDat
 
       {tab === "staff" && <StaffCSVManager users={users} setUsers={setUsers} />}
 
-      {tab === "setup" && <StaffSetup users={users} setUsers={setUsers} depts={depts} setDepts={updateDepts} />}
+      {tab === "setup" && <StaffSetup users={users} setUsers={setUsers} depts={depts} setDepts={setDepts} />}
 
       {tab === "availability" && (() => {
         // Only show actual employees (not owner/manager)
@@ -1624,7 +1624,7 @@ function StaffSetup({ users, setUsers, depts, setDepts }) {
       )}
 
       {/* ── Departments ── */}
-      <DeptManager depts={depts} setDepts={updateDepts} users={users} />
+      <DeptManager depts={depts} setDepts={setDepts} users={users} />
 
       {/* Manager access callout */}
       <div style={{ background: "#3b82f610", border: "1px solid #3b82f625", borderRadius: 10, padding: "10px 14px", marginBottom: 20, display: "flex", gap: 10, alignItems: "flex-start" }}>

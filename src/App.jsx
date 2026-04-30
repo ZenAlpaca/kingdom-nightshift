@@ -532,7 +532,7 @@ export default function App() {
     <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e4dc", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #0a0a0f; } ::-webkit-scrollbar-thumb { background: #2a2a38; border-radius: 2px; }
         input, select, textarea { font-family: 'DM Sans', sans-serif; }
         .btn { cursor: pointer; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: all 0.15s; }
@@ -542,26 +542,41 @@ export default function App() {
         .fade-in { animation: fadeIn 0.25s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 16px; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal { background: #12121a; border: 1px solid #2a2a3e; border-radius: 20px; padding: 26px; width: 92%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-        .input { background: #0a0a0f; border: 1px solid #2a2a3e; color: #e8e4dc; border-radius: 8px; padding: 9px 13px; width: 100%; font-size: 14px; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); z-index: 100; display: flex; align-items: flex-end; justify-content: center; backdrop-filter: blur(5px); }
+        .modal { background: #12121a; border: 1px solid #2a2a3e; border-radius: 20px 20px 0 0; padding: 22px 16px 32px; width: 100%; max-height: 92vh; overflow-y: auto; }
+        .input { background: #0a0a0f; border: 1px solid #2a2a3e; color: #e8e4dc; border-radius: 8px; padding: 9px 13px; width: 100%; font-size: 16px; }
         .input:focus { outline: none; border-color: #f97316; }
-        select.input option { background: #12121a; }
-        .nav-btn { background: none; border: none; cursor: pointer; padding: 8px 13px; border-radius: 10px; color: #555; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+        select.input { font-size: 16px; } select.input option { background: #12121a; }
+        .nav-btn { background: none; border: none; cursor: pointer; padding: 8px 12px; border-radius: 10px; color: #555; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.15s; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
         .nav-btn.active { background: #1a1a28; color: #f97316; }
         .nav-btn:hover:not(.active) { background: #111118; color: #aaa; }
         .shift-card { background: #13131e; border-radius: 10px; padding: 12px 14px; border-left: 3px solid; margin-bottom: 8px; }
         .day-pill { cursor: pointer; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid; transition: all 0.15s; background: none; font-family: 'DM Sans', sans-serif; letter-spacing: 0.02em; }
+        .builder-input { background: transparent; border: none; color: #e8e4dc; font-family: 'DM Sans', sans-serif; font-size: 11px; width: 100%; text-align: center; outline: none; }
+        /* Mobile bottom nav */
+        .bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: #0c0c13; border-top: 1px solid #181824; z-index: 50; padding-bottom: env(safe-area-inset-bottom, 0px); }
+        .bnav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 7px 2px 5px; border: none; background: none; cursor: pointer; color: #444; font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 600; gap: 2px; min-height: 54px; letter-spacing: 0.02em; text-transform: uppercase; }
+        .bnav-btn.active { color: #f97316; }
+        .bnav-btn .ico { font-size: 22px; line-height: 1; }
+        /* Desktop overrides */
+        @media (min-width: 768px) {
+          .overlay { align-items: center; }
+          .modal { border-radius: 20px; width: 92%; max-width: 500px; padding: 26px; }
+          .bottom-nav { display: none; }
+          .desktop-nav { display: flex !important; }
+          .page-pad { padding: 22px 24px 22px !important; }
+        }
       `}</style>
 
       {/* Header */}
-      <div style={{ background: "#0c0c13", borderBottom: "1px solid #181824", padding: "0 18px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, position: "sticky", top: 0, zIndex: 50 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-          <div style={{ width: 28, height: 28, background: "linear-gradient(135deg,#f97316,#ec4899)", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🎵</div>
-          <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: 16, letterSpacing: "-0.03em" }}>Kingdom NightShift</span>
+      <div style={{ background: "#0c0c13", borderBottom: "1px solid #181824", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 52, position: "sticky", top: 0, zIndex: 50 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 26, height: 26, background: "linear-gradient(135deg,#f97316,#ec4899)", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, flexShrink: 0 }}>🎵</div>
+          <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: 15, letterSpacing: "-0.03em", whiteSpace: "nowrap" }}>Kingdom NightShift</span>
         </div>
 
-        <nav style={{ display: "flex", gap: 1 }}>
+        {/* Desktop nav — hidden on mobile via CSS */}
+        <nav className="desktop-nav" style={{ display: "none", gap: 1 }}>
           {(() => {
             const tNav = T[lang];
             return [
@@ -578,20 +593,19 @@ export default function App() {
           ))}
         </nav>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <button onClick={() => { setView("notifs"); markNotifsRead(); }} style={{ background: "none", border: "none", cursor: "pointer", position: "relative", color: "#666", fontSize: 17, lineHeight: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button onClick={() => { setView("notifs"); markNotifsRead(); }} style={{ background: "none", border: "none", cursor: "pointer", position: "relative", color: "#666", fontSize: 20, lineHeight: 1, padding: "4px 6px" }}>
             🔔
-            {myNotifs.length > 0 && <span style={{ position: "absolute", top: -4, right: -5, background: "#f97316", color: "#fff", borderRadius: "50%", width: 15, height: 15, fontSize: 9, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700 }}>{myNotifs.length}</span>}
+            {myNotifs.length > 0 && <span style={{ position: "absolute", top: 0, right: 2, background: "#f97316", color: "#fff", borderRadius: "50%", width: 16, height: 16, fontSize: 9, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700 }}>{myNotifs.length}</span>}
           </button>
-          <div style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer" }} onClick={logout} title="Tap to log out">
-            <div style={{ width: 28, height: 28, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#f97316" }}>{user.avatar}</div>
-            <span style={{ fontSize: 12, color: "#555" }}>{user.name.split(" ")[0]}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }} onClick={logout} title="Tap to log out">
+            <div style={{ width: 30, height: 30, background: "#1a1a28", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#f97316", flexShrink: 0 }}>{user.avatar}</div>
           </div>
         </div>
       </div>
 
       {/* Page */}
-      <div style={{ padding: "22px 18px", maxWidth: 1100, margin: "0 auto" }} className="fade-in">
+      <div className="page-pad fade-in" style={{ padding: "16px 14px 76px", maxWidth: 1100, margin: "0 auto" }}>
         {view === "schedule"     && <ScheduleView     user={user} shifts={shifts} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} users={allUsers} giveupRequests={giveupRequests} onGiveup={s => setModal({ type: "giveup", shift: s })} dayMeta={dayMeta} depts={depts} showDays={showDays} />}
         {view === "availability" && <AvailabilityView user={user} availability={availability} onSubmit={() => setModal({ type: "availability" })} />}
         {view === "timeoff"      && <TimeOffView      user={user} requests={timeOffRequests} onRequest={() => setModal({ type: "timeoff" })} onAction={user.role === "owner" || user.role === "manager" ? handleTimeOffAction : null} onDelete={deleteTimeOff} users={allUsers} />}
@@ -599,6 +613,25 @@ export default function App() {
         {view === "admin" && (user.role === "owner" || user.role === "manager") && <AdminView shifts={shifts} users={allUsers} setUsers={updateUsers} onAddShift={saveShiftDirect} onDeleteShift={deleteShift} weekDates={weekDates} weekOffset={weekOffset} setWeekOffset={setWeekOffset} visibleDays={visibleDays} toggleDay={toggleDay} availability={availability} timeOffRequests={timeOffRequests} onTimeOffAction={handleTimeOffAction} onDeleteTimeOff={deleteTimeOff} showDays={showDays} setShowDays={setShowDays} currentUser={user} dayMeta={dayMeta} setDayMeta={setDayMeta} depts={depts} setDepts={updateDepts} sendTelegram={sendTelegram} />}
         {view === "notifs"       && <NotifsView       notifications={notifications.filter(n => n.userId === user.id)} />}
       </div>
+
+      {/* Mobile bottom nav */}
+      <nav className="bottom-nav">
+        {(() => {
+          const tNav = T[lang];
+          return [
+            { id: "schedule",     label: tNav.schedule,      icon: "📅" },
+            { id: "availability", label: tNav.availability,  icon: "🗓" },
+            { id: "timeoff",      label: tNav.timeOff,       icon: "🏖" },
+            { id: "swaps",        label: tNav.swaps,         icon: "🔄" },
+            ...(user.role === "owner" || user.role === "manager" ? [{ id: "admin", label: tNav.admin, icon: "⚙️" }] : []),
+          ];
+        })().map(v => (
+          <button key={v.id} className={`bnav-btn ${view === v.id ? "active" : ""}`} onClick={() => setView(v.id)}>
+            <span className="ico">{v.icon}</span>
+            <span>{v.label}</span>
+          </button>
+        ))}
+      </nav>
 
       {modal?.type === "giveup"       && <GiveupModal       shift={modal.shift} user={user} onConfirm={postGiveup} onClose={() => setModal(null)} depts={depts} />}
       {modal?.type === "timeoff"      && <TimeOffModal       onConfirm={submitTimeOff} onClose={() => setModal(null)} />}

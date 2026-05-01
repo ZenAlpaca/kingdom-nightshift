@@ -840,10 +840,25 @@ function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visi
                             <td key={i} style={{ padding: "4px 5px", verticalAlign: "top" }}>
                               {dayShifts.map(s => {
                                 const givenUp = giveupRequests.find(r => r.shiftId === s.id && r.status === "open");
+                                const isOnCall = s.start === "ON CALL";
+                                const isClose = s.end === "CLOSE";
                                 return (
-                                  <div key={s.id} style={{ background: isMe && !isOwner ? "#1a1428" : "#181826", borderLeft: `3px solid ${givenUp ? "#555" : (color)}`, borderRadius: 6, padding: "4px 6px", marginBottom: 3, opacity: givenUp ? 0.55 : 1 }}>
-                                    <div style={{ fontSize: 10, fontWeight: 600, color }}>{s.start}</div>
-                                    <div style={{ fontSize: 9, color: "#555" }}>{s.end}</div>
+                                  <div key={s.id} style={{
+                                    background: isOnCall ? "#141208" : isMe && !isOwner ? "#1a1428" : "#181826",
+                                    borderLeft: `3px solid ${givenUp ? "#555" : isOnCall ? "#eab308" : color}`,
+                                    borderRadius: 6, padding: "4px 6px", marginBottom: 3, opacity: givenUp ? 0.55 : 1
+                                  }}>
+                                    {isOnCall ? (
+                                      <>
+                                        <div style={{ fontSize: 9, fontWeight: 700, color: "#eab308", letterSpacing: "0.04em" }}>ON CALL</div>
+                                        <div style={{ fontSize: 8, color: "#eab30860" }}>standby</div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div style={{ fontSize: 10, fontWeight: 600, color }}>{s.start}</div>
+                                        <div style={{ fontSize: 9, color: "#555" }}>{isClose ? "CLOSE" : s.end}</div>
+                                      </>
+                                    )}
                                     {givenUp && <div style={{ fontSize: 9, color: "#f97316" }}>open</div>}
                                   </div>
                                 );
@@ -939,10 +954,20 @@ function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visi
                   )}
                   {dayShifts.length > 0 ? dayShifts.map(s => {
                     const givenUp = giveupRequests.find(r => r.shiftId === s.id && r.status === "open");
+                    const isOnCall = s.start === "ON CALL";
+                    const isClose = s.end === "CLOSE";
                     return (
-                      <div key={s.id} style={{ background: "#181826", borderRadius: 6, padding: "6px 8px", borderLeft: `3px solid ${givenUp ? "#555" : (DC(s.role))}`, opacity: givenUp ? 0.6 : 1, marginBottom: 4 }}>
-                        <div style={{ fontSize: 10, fontWeight: 600, color: DC(s.role) }}>{s.role}</div>
-                        <div style={{ fontSize: 10, color: "#555" }}>{s.start}–{s.end}</div>
+                      <div key={s.id} style={{
+                        background: isOnCall ? "#1a1808" : "#181826",
+                        borderRadius: 6, padding: "6px 8px",
+                        borderLeft: `3px solid ${givenUp ? "#555" : isOnCall ? "#eab308" : DC(s.role)}`,
+                        opacity: givenUp ? 0.6 : 1, marginBottom: 4
+                      }}>
+                        <div style={{ fontSize: 10, fontWeight: 600, color: isOnCall ? "#eab308" : DC(s.role) }}>{s.role}</div>
+                        {isOnCall
+                          ? <div style={{ fontSize: 9, color: "#eab30880", fontWeight: 600, letterSpacing: "0.05em" }}>ON CALL</div>
+                          : <div style={{ fontSize: 10, color: "#555" }}>{s.start}{isClose ? " – CLOSE" : s.end ? `–${s.end}` : ""}</div>
+                        }
                         {givenUp && <div style={{ fontSize: 9, color: "#f97316", marginTop: 2 }}>{t.pendingPickup}</div>}
                         {s.note && <div style={{ fontSize: 9, color: "#444", marginTop: 1 }}>{s.note}</div>}
                       </div>
@@ -959,11 +984,15 @@ function ScheduleView({ user, shifts, weekDates, weekOffset, setWeekOffset, visi
               <h3 style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 13, fontWeight: 600, marginBottom: 10, color: "#555", letterSpacing: "0.04em" }}>{t.myShifts.toUpperCase()}</h3>
               {myShifts.map(s => {
                 const givenUp = giveupRequests.find(r => r.shiftId === s.id && r.status === "open");
+                const isOnCall = s.start === "ON CALL";
+                const isClose = s.end === "CLOSE";
                 return (
-                  <div key={s.id} className="shift-card" style={{ borderLeftColor: givenUp ? "#444" : (DC(s.role)), display: "flex", alignItems: "center", justifyContent: "space-between", opacity: givenUp ? 0.6 : 1 }}>
+                  <div key={s.id} className="shift-card" style={{ borderLeftColor: givenUp ? "#444" : isOnCall ? "#eab308" : DC(s.role), background: isOnCall ? "#141208" : "#13131e", display: "flex", alignItems: "center", justifyContent: "space-between", opacity: givenUp ? 0.6 : 1 }}>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: DC(s.role) }}>{s.role}</div>
-                      <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{s.date} · {s.start}–{s.end}{s.note ? ` · ${s.note}` : ""}</div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: isOnCall ? "#eab308" : DC(s.role) }}>{s.role}{isOnCall ? " · ON CALL" : ""}</div>
+                      <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>
+                        {s.date} · {isOnCall ? "Standby — may be called in" : `${s.start}${isClose ? " – CLOSE" : s.end ? ` – ${s.end}` : ""}${s.note ? ` · ${s.note}` : ""}`}
+                      </div>
                       {givenUp && <div style={{ fontSize: 11, color: "#f97316", marginTop: 3 }}>🔄 {t.awaitingCoworker}</div>}
                     </div>
                     {!givenUp && <button className="btn" onClick={() => onGiveup(s)} style={{ background: "#1a1a28", color: "#666", padding: "6px 12px", fontSize: 12, flexShrink: 0 }}>{t.giveUp}</button>}
@@ -1145,7 +1174,7 @@ function SwapsView({ user, shifts, giveupRequests, users, onGiveup, onClaim, dep
               <div key={r.id} className="shift-card" style={{ borderLeftColor: DC(shift.role), display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600, color: DC(shift.role) }}>{shift.role}</div>
-                  <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{shift.date} · {shift.start}–{shift.end}{shift.note ? ` · ${shift.note}` : ""}</div>
+                  <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{shift.date} · {shift.start === "ON CALL" ? "On Call" : `${shift.start}${shift.end === "CLOSE" ? " – CLOSE" : shift.end ? `–${shift.end}` : ""}${shift.note ? ` · ${shift.note}` : ""}`}</div>
                   <div style={{ fontSize: 11, color: "#444", marginTop: 2 }}>From {from?.name}</div>
                   {r.note && (
                     <div style={{ fontSize: 11, color: "#888", marginTop: 5, background: "#111118", borderRadius: 6, padding: "4px 8px", borderLeft: "2px solid #2a2a3e" }}>
